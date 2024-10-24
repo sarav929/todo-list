@@ -1,4 +1,11 @@
 {
+  "name": "todo-list",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "webpack --config webpack.prod.js",
+    "start": "webpack serve --config webpack.dev.js"
+  },
+
   "devDependencies": {
     "css-loader": "^7.1.2",
     "html-loader": "^5.1.0",
@@ -6,6 +13,7 @@
     "style-loader": "^4.0.0",
     "webpack": "^5.95.0",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.1.0"
+    "webpack-dev-server": "^5.1.0",
+    "webpack-merge": "^6.0.1"
   }
 }
