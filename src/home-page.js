@@ -71,10 +71,10 @@ const createHome = () => {
     const content = document.createElement('div')
     content.setAttribute('id', 'content')
 
-    content.textContent = "Here's the content"
+    //content.textContent = "Here's the content"
 
     const pageTitle = document.createElement('h1')
-    pageTitle.textContent = 'Page Title'
+    //pageTitle.textContent = 'Page Title'
     const newTask = document.createElement('button')
     newTask.textContent = '+ New Task'
     newTask.setAttribute('id', 'new-task-btn')
@@ -83,6 +83,26 @@ const createHome = () => {
     main.appendChild(content)
     header.appendChild(pageTitle)
     header.appendChild(newTask)
+
+    // handle click // 
+
+    today.addEventListener('click', () => {
+        pageTitle.textContent = "Today's Tasks"
+        content.textContent = "Here's today's tasks"
+    })
+
+    unsorted.addEventListener('click', () => {
+        pageTitle.textContent = "Unsorted Tasks"
+        content.textContent = "Here's your unsorted tasks"
+    })
+
+    const myProjects = document.getElementsByClassName('project-btn')
+    for (let btn of myProjects) {
+        btn.addEventListener('click', () => {
+            pageTitle.textContent = btn.textContent
+            content.textContent = `Here will be ${btn.textContent}'s tasks`
+        })
+    }
 
 
 
