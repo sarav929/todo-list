@@ -60,6 +60,32 @@ const createHome = () => {
     test2.setAttribute('class', 'project-btn')
     projList.appendChild(test2)
 
+    ////////
+
+    //main content//
+
+    const main = document.createElement('main')
+    container.appendChild(main)
+    const header = document.createElement('header')
+
+    const content = document.createElement('div')
+    content.setAttribute('id', 'content')
+
+    content.textContent = "Here's the content"
+
+    const pageTitle = document.createElement('h1')
+    pageTitle.textContent = 'Page Title'
+    const newTask = document.createElement('button')
+    newTask.textContent = '+ New Task'
+    newTask.setAttribute('id', 'new-task-btn')
+
+    main.appendChild(header)
+    main.appendChild(content)
+    header.appendChild(pageTitle)
+    header.appendChild(newTask)
+
+
+
 }
 
 export default createHome
