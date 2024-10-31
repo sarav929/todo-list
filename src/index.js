@@ -1,7 +1,7 @@
 import Project from './project'
 import Task from './task'
-import CheckList from './checklist'
-import createSidebar from './sidebar'
+import createHome from './home-page'
+import '../src/styles/base.css'
 
 
-createSidebar()
+createHome()
