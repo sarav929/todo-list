@@ -1,7 +1,9 @@
 import Project from "./project"
+import createHome from "./home-page"
+import { renderNewProject } from "./home-page"
+import { getProjects } from "./storage"
 
 const createProjectForm = () => {
-    let projectsList = []
 
     const pageTitle = document.getElementById('page-title')
     const content = document.getElementById('content')
@@ -16,7 +18,7 @@ const createProjectForm = () => {
         <input type="text" id="project-description">
     </label>
 
-    <button type="submit">Add task</button>
+    <button type="submit">Create project</button>
 
     </form>`
 
@@ -26,14 +28,21 @@ const createProjectForm = () => {
 
     const projDescription = document.getElementById("project-description")
 
+    // retrieve projects //
+
+    let projectsList = getProjects()
+
     form.addEventListener('submit', (e) => {
         e.preventDefault()
 
         let newProject = new Project(projTitle.value, projDescription.value)
-
         projectsList.push(newProject)
+        
+        //!!!!!! SAVE LIST TO LOCAL STORAGE!!!!!!//
 
-        console.log(projectsList)
+        renderNewProject(newProject)
+        
+        form.reset()
     })
 
 }

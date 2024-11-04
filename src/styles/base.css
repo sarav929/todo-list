@@ -44,7 +44,7 @@ nav {
     gap: 1rem;
 }
 
-.project-list {
+#project-list {
     display: flex;
     flex-direction: column;
     margin-top: 1rem;

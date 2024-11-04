@@ -1,5 +1,7 @@
 import Task from "./task"
+import Project from "./project"
 import createProjectForm from "./project-form"
+import { getProjects } from "./storage"
 
 const createTaskForm = () => {
 
@@ -19,13 +21,8 @@ const createTaskForm = () => {
     </label>
 
     <label for="task-due-date">Project:
-        <select name="project" id="project-list">
-            <option value="none" selected="selected">None</option>
+        <select name="project" id="project-selection">
         </select>
-    </label>
-
-    <label for="new-project">or create a new one first:
-        <button type="button" id="new-project-for-task">+ New Project</button>
     </label>
 
     <label for="task-note">Note:
@@ -42,23 +39,30 @@ const createTaskForm = () => {
 
     const taskTitle = document.getElementById('task-title')
 
-    const taskDueDate = document.getElementById("task-due-date")
+    const taskDueDate = document.getElementById('task-due-date')
 
-    const projectSelect = document.getElementById('project-list')
+    const projectSelect = document.getElementById('project-selection')
 
-    const newProj = document.getElementById('new-project-for-task')
-    newProj.addEventListener('click', () => {
-        createProjectForm()
-    })
+    let projectsList = getProjects()
+    console.log(projectsList)
+
+    projectsList.forEach((project) => {
+        const option = document.createElement('option')
+        option.setAttribute('value', project.title)
+        option.textContent = project.title
+        projectSelect.appendChild(option)
+    }) 
+
 
     const taskNote = document.getElementById('task-note')
 
     form.addEventListener('submit', (e) => {
         e.preventDefault()
+
         let newTask = new Task(taskTitle.value, taskDueDate.value, projectSelect.value, taskNote.value)
 
-        taskList.push(newTask)
-        console.log(taskList)
+        const assignedProject = projectsList.find(project => project.title == projectSelect.value)
+        assignedProject.tasks.push(newTask)
 
         form.reset()
     })

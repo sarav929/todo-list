@@ -1,9 +1,8 @@
 class Project {
-    constructor(title, description, tasks = [], isCompleted = false) {
+    constructor(title, description, tasks = []) {
         this.title = title
         this.description = description
         this.tasks = tasks
-        this.isCompleted = isCompleted
     }
 
     addTask(task) {
