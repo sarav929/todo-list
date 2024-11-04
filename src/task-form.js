@@ -1,11 +1,9 @@
 import Task from "./task"
 import Project from "./project"
 import createProjectForm from "./project-form"
-import { getProjects } from "./storage"
+import { getProjects, saveProjects} from "./storage"
 
 const createTaskForm = () => {
-
-    let taskList = []
 
     const pageTitle = document.getElementById('page-title')
     const content = document.getElementById('content')
@@ -63,6 +61,8 @@ const createTaskForm = () => {
 
         const assignedProject = projectsList.find(project => project.title == projectSelect.value)
         assignedProject.tasks.push(newTask)
+
+        saveProjects(projectsList)
 
         form.reset()
     })

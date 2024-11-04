@@ -1,7 +1,7 @@
 import Project from "./project"
 import createHome from "./home-page"
 import { renderNewProject } from "./home-page"
-import { getProjects } from "./storage"
+import { getProjects, saveProjects } from "./storage"
 
 const createProjectForm = () => {
 
@@ -37,8 +37,8 @@ const createProjectForm = () => {
 
         let newProject = new Project(projTitle.value, projDescription.value)
         projectsList.push(newProject)
-        
-        //!!!!!! SAVE LIST TO LOCAL STORAGE!!!!!!//
+
+        saveProjects(projectsList)
 
         renderNewProject(newProject)
         

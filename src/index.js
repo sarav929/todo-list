@@ -2,9 +2,9 @@ import Project from './project'
 import Task from './task'
 import createHome from './home-page'
 import '../src/styles/base.css'
-import { initializeProjects, saveProjects, getProjects } from './storage.js'
+import { initializeProjects } from './storage.js'
 
-localStorage.clear
+localStorage.clear()
 
 let projects = initializeProjects()
 
