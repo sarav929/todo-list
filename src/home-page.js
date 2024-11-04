@@ -1,5 +1,7 @@
 import Project from "./project"
 import Task from "./task"
+import createTaskForm from "./task-form"
+import createProjectForm from "./project-form"
 
 
 const createHome = () => {
@@ -75,6 +77,7 @@ const createHome = () => {
     //content.textContent = "Here's the content"
 
     const pageTitle = document.createElement('h1')
+    pageTitle.setAttribute('id', 'page-title')
     //pageTitle.textContent = 'Page Title'
     const newTask = document.createElement('button')
     newTask.textContent = '+ New Task'
@@ -88,13 +91,11 @@ const createHome = () => {
     // nav handle click // 
 
     newTask.addEventListener('click', () => {
-        pageTitle.textContent = "Create a new task"
-        content.textContent = "Here's the form to create a new task"
+        createTaskForm()
     })
 
     newProj.addEventListener('click', () => {
-        pageTitle.textContent = "Create a new project"
-        content.textContent = "Here's the form to create a new project"
+        createProjectForm()
     })
 
     today.addEventListener('click', () => {

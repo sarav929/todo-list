@@ -1,17 +1,10 @@
 class Task {
-    constructor(title, dueDate, note = "", checklist = []) {
+    constructor(title, dueDate, project, note = "", isCompleted = false) {
         this.title = title
         this.dueDate = dueDate
+        this.project = project
         this.note = note
-        this.checklist = checklist
-    }
-
-    addChecklist(check) {
-        this.checklist.push(check)
-    }
-
-    removeChecklist(check) {
-        this.checklist.filter(item => item !== check)
+        this.isCompleted = isCompleted
     }
 
     updateTaskInfo(attribute, value) {

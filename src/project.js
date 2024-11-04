@@ -1,9 +1,7 @@
 class Project {
-    constructor(title, dueDate, description, note = "", tasks = [], isCompleted = false) {
+    constructor(title, description, tasks = [], isCompleted = false) {
         this.title = title
-        this.dueDate = dueDate
         this.description = description
-        this.note = note
         this.tasks = tasks
         this.isCompleted = isCompleted
     }
