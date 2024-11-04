@@ -1,6 +1,7 @@
 import Project from "./project"
 import Task from "./task"
 
+
 const createHome = () => {
     const body = document.querySelector('body')
 
@@ -84,7 +85,17 @@ const createHome = () => {
     header.appendChild(pageTitle)
     header.appendChild(newTask)
 
-    // handle click // 
+    // nav handle click // 
+
+    newTask.addEventListener('click', () => {
+        pageTitle.textContent = "Create a new task"
+        content.textContent = "Here's the form to create a new task"
+    })
+
+    newProj.addEventListener('click', () => {
+        pageTitle.textContent = "Create a new project"
+        content.textContent = "Here's the form to create a new project"
+    })
 
     today.addEventListener('click', () => {
         pageTitle.textContent = "Today's Tasks"
@@ -104,8 +115,8 @@ const createHome = () => {
         })
     }
 
-
-
 }
+
+
 
 export default createHome
