@@ -99,3 +99,30 @@ label {
 input, select, textarea {
     width: 300px;
 }
+
+#tasks-wrapper { 
+    display: flex;
+    flex-direction: column;
+    min-width: 40vw;
+    gap: 2rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+
+    & input {
+        width: 1rem;
+    }
+
+
+}
+
+.task {
+    display: flex;
+    border: black solid;
+    justify-content: space-evenly;
+    padding: .5rem;
+}
+
+.task-completed {
+    text-decoration: line-through;
+    color: rgba(0, 0, 0, 0.298); 
+}
