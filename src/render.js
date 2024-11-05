@@ -1,4 +1,6 @@
 import { getProjects } from "./storage"
+import editImg from "../src/icons/edit.svg"
+import expandImg from "../src/icons/expand.svg"
 
 export function renderNewProject(project) {
     const projectBtn = document.createElement('button')
@@ -55,9 +57,16 @@ export function renderTask(task) {
 
     tasks.appendChild(taskDiv)
 
+    const collapsed = document.createElement('div')
+    collapsed.setAttribute('class', 'collapsed')
+    taskDiv.appendChild(collapsed)
+
+    const taskInfo = document.createElement('div')
+    taskInfo.setAttribute('class', 'task-info')
+
     const isCompletedCheck = document.createElement('input')
     isCompletedCheck.setAttribute('type', 'checkbox')
-    taskDiv.appendChild(isCompletedCheck)
+    collapsed.appendChild(isCompletedCheck)
 
     // mark as complete/not complete // 
 
@@ -65,43 +74,67 @@ export function renderTask(task) {
         if (isCompletedCheck.checked) {
             taskDiv.classList.add('task-completed')
             task.updateTaskInfo("isCompleted", true)
-            console.log(task)
         } else {
             taskDiv.classList.remove('task-completed')
             task.updateTaskInfo("isCompleted", false)
-            console.log(task)
         }
     })
+
+    collapsed.appendChild(taskInfo)
 
     const name = document.createElement('div')
     name.setAttribute('class', 'task-name')
     name.textContent = task.title
-    taskDiv.appendChild(name)
+    taskInfo.appendChild(name)
 
     const date = document.createElement('div')
     name.setAttribute('class', 'task-date')
     date.textContent = task.dueDate
-    taskDiv.appendChild(date)
+    taskInfo.appendChild(date)
 
-    const note = document.createElement('div')
-    name.setAttribute('class', 'task-note')
-    note.textContent = task.note
-    taskDiv.appendChild(note)
 
     // delete & edit //
 
     const icons = document.createElement('div')
     icons.setAttribute('class', 'actions')
-    taskDiv.appendChild(icons)
+    collapsed.appendChild(icons)
 
-    const deleteIcon = document.createElement('button')
-    deleteIcon.textContent = 'D'
-    icons.appendChild(deleteIcon)
+    const expandIcon = document.createElement('img')
+    expandIcon.setAttribute('id', 'expand-task')
+    expandIcon.src = expandImg
+    icons.appendChild(expandIcon)
+    if (task.note == '') {
+        expandIcon.style.visibility = 'hidden'
+    } else {
+        const expanded = document.createElement('div')
+        expanded.setAttribute('class', 'expanded')
+        taskDiv.appendChild(expanded)
+        const note = document.createElement('div')
+        name.setAttribute('class', 'task-note')
+        note.textContent = task.note
+        expanded.appendChild(note)
 
-    const editIcon = document.createElement('button')
-    editIcon.textContent = 'E'
+        expandIcon.addEventListener('click', () => {
+            if (expanded.style.display == 'none') {
+                expanded.style.display = 'block'
+            } else {
+                expanded.style.display = 'none'
+            }      
+        })
+    }
+
+    const editIcon = document.createElement('img')
+    editIcon.setAttribute('id', 'edit-task')
+    editIcon.src = editImg
     icons.appendChild(editIcon)
 
+    editIcon.addEventListener('click', () => {
+        renderEditModal()
+    })
+}
+
+function renderEditModal() {
+    console.log('this will open a modal to edit task')
 }
 
 export function clear(element) {

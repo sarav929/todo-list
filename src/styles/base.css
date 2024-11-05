@@ -117,9 +117,41 @@ input, select, textarea {
 
 .task {
     display: flex;
+    flex-direction: column;
     border: black solid;
-    justify-content: space-evenly;
+    align-items: center;
     padding: .5rem;
+
+    & #expand-task {
+        width: 1.5rem;
+    }
+
+    & #edit-task {
+        width: 1.3rem;
+    }
+}
+
+.collapsed {
+    display: flex;
+    width: 100%;
+}
+
+.task-info {
+    display: flex;
+    justify-content:space-around;
+    width: 80%;
+}
+
+.expanded {
+    display: none;
+    padding: 1rem;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    justify-self: flex-end;
 }
 
 .task-completed {
