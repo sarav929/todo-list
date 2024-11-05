@@ -1,7 +1,7 @@
-import Project from "./project"
-import Task from "./task"
 import createTaskForm from "./task-form"
-
+import createProjectForm from "./project-form"
+import { getProjects } from "./storage"
+import { renderProjects } from "./render"
 
 const createHome = () => {
     const body = document.querySelector('body')
@@ -30,16 +30,11 @@ const createHome = () => {
     today.textContent = "Today's Tasks"
     btnWrapper.appendChild(today)
 
-    const unsorted = document.createElement('button')
-    unsorted.setAttribute('class', 'nav-btn')
-    unsorted.textContent = "Unsorted Tasks"
-    btnWrapper.appendChild(unsorted)
-
     // projects section //
-
-    const projects = document.createElement('h2')
-    projects.textContent = "My Projects"
-    sidebar.appendChild(projects)
+    
+    const projectsHeader = document.createElement('h2')
+    projectsHeader.textContent = "My Projects"
+    sidebar.appendChild(projectsHeader)
 
     const newProj = document.createElement('button')
     newProj.setAttribute('id', 'new-project-btn')
@@ -47,22 +42,10 @@ const createHome = () => {
     sidebar.appendChild(newProj)
 
     const projList = document.createElement('div')
-    projList.setAttribute('class', 'project-list')
+    projList.setAttribute('id', 'project-list')
     sidebar.appendChild(projList)
 
-    ///// test projects ///// 
-
-    const test1 = document.createElement('button')
-    test1.textContent = "Project one"
-    test1.setAttribute('class', 'project-btn')
-    projList.appendChild(test1)
-
-    const test2 = document.createElement('button')
-    test2.textContent = "Project two"
-    test2.setAttribute('class', 'project-btn')
-    projList.appendChild(test2)
-
-    ////////
+    renderProjects(getProjects())
 
     //main content//
 
@@ -73,11 +56,9 @@ const createHome = () => {
     const content = document.createElement('div')
     content.setAttribute('id', 'content')
 
-    //content.textContent = "Here's the content"
-
     const pageTitle = document.createElement('h1')
     pageTitle.setAttribute('id', 'page-title')
-    //pageTitle.textContent = 'Page Title'
+
     const newTask = document.createElement('button')
     newTask.textContent = '+ New Task'
     newTask.setAttribute('id', 'new-task-btn')
@@ -94,27 +75,13 @@ const createHome = () => {
     })
 
     newProj.addEventListener('click', () => {
-        pageTitle.textContent = "Create a new project"
-        content.textContent = "Here's the form to create a new project"
+        createProjectForm()
     })
 
     today.addEventListener('click', () => {
         pageTitle.textContent = "Today's Tasks"
         content.textContent = "Here's today's tasks"
     })
-
-    unsorted.addEventListener('click', () => {
-        pageTitle.textContent = "Unsorted Tasks"
-        content.textContent = "Here's your unsorted tasks"
-    })
-
-    const myProjects = document.getElementsByClassName('project-btn')
-    for (let btn of myProjects) {
-        btn.addEventListener('click', () => {
-            pageTitle.textContent = btn.textContent
-            content.textContent = `Here will be ${btn.textContent}'s tasks`
-        })
-    }
 
 }
 

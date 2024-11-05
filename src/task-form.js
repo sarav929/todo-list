@@ -1,8 +1,9 @@
 import Task from "./task"
 
-const createTaskForm = () => {
+import { getProjects, saveProjects} from "./storage"
+import { renderProjects, renderProjectPage } from "./render"
 
-    let taskList = []
+const createTaskForm = () => {
 
     const pageTitle = document.getElementById('page-title')
     const content = document.getElementById('content')
@@ -18,13 +19,9 @@ const createTaskForm = () => {
     </label>
 
     <label for="task-due-date">Project:
-        <select name="project" id="project-list">
-            <option value="none" selected="selected">None</option>
-        </select>
-    </label>
 
-    <label for="new-project">or create a new one first:
-        <button type="button" id="new-project-for-task">+ New Project</button>
+        <select name="project" id="project-selection">
+        </select>
     </label>
 
     <label for="task-note">Note:
@@ -41,14 +38,19 @@ const createTaskForm = () => {
 
     const taskTitle = document.getElementById('task-title')
 
-    const taskDueDate = document.getElementById("task-due-date")
+    const taskDueDate = document.getElementById('task-due-date')
 
-    const projectSelect = document.getElementById('project-list')
+    const projectSelect = document.getElementById('project-selection')
 
-    const newProj = document.getElementById('new-project-for-task')
-    newProj.addEventListener('click', () => {
-        console.log('switch to project form') /////////
-    })
+    let projectsList = getProjects()
+    console.log(projectsList)
+
+    projectsList.forEach((project) => {
+        const option = document.createElement('option')
+        option.setAttribute('value', project.title)
+        option.textContent = project.title
+        projectSelect.appendChild(option)
+    }) 
 
     const taskNote = document.getElementById('task-note')
 
@@ -56,13 +58,14 @@ const createTaskForm = () => {
         e.preventDefault()
         let newTask = new Task(taskTitle.value, taskDueDate.value, projectSelect.value, taskNote.value)
 
-        taskList.push(newTask)
-        console.log(taskList)
-
+        const assignedProject = projectsList.find(project => project.title == projectSelect.value)
+        assignedProject.addTask(newTask)
+        saveProjects(projectsList)
         form.reset()
+        renderProjects(projectsList)
+        renderProjectPage(assignedProject)
+        
     })
-
-
 }
 
 export default createTaskForm
