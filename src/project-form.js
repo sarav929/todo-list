@@ -39,7 +39,6 @@ const createProjectForm = () => {
         projectsList.push(newProject)
 
         saveProjects(projectsList)
-
         renderNewProject(newProject)
         
         form.reset()

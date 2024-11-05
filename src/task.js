@@ -1,3 +1,5 @@
+import { getProjects, saveProjects } from "./storage"
+
 class Task {
     constructor(title, dueDate, project, note = "", isCompleted = false) {
         this.title = title
@@ -9,6 +11,7 @@ class Task {
 
     updateTaskInfo(attribute, value) {
         this[attribute] = value
+        saveProjects(getProjects())
     }
 }
 

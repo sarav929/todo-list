@@ -61,25 +61,27 @@ export function renderTask(task) {
     isCompletedCheck.addEventListener('change', () => {
         if (isCompletedCheck.checked) {
             taskDiv.classList.add('task-completed')
-            task.isCompletedCheck = true
+            task.updateTaskInfo("isCompleted", true)
+            console.log(task)
         } else {
             taskDiv.classList.remove('task-completed')
-            task.isCompletedCheck = false
+            task.updateTaskInfo("isCompleted", false)
+            console.log(task)
         }
     })
 
     const name = document.createElement('div')
-    name.setAttribute('id', 'task-name')
+    name.setAttribute('class', 'task-name')
     name.textContent = task.title
     taskDiv.appendChild(name)
 
     const date = document.createElement('div')
-    name.setAttribute('id', 'task-date')
+    name.setAttribute('class', 'task-date')
     date.textContent = task.dueDate
     taskDiv.appendChild(date)
 
     const note = document.createElement('div')
-    name.setAttribute('id', 'task-note')
+    name.setAttribute('class', 'task-note')
     note.textContent = task.note
     taskDiv.appendChild(note)
 
@@ -131,8 +133,6 @@ const createHome = () => {
     btnWrapper.appendChild(today)
 
     // projects section //
-
-    let projectsList = getProjects()
     
     const projectsHeader = document.createElement('h2')
     projectsHeader.textContent = "My Projects"
@@ -147,7 +147,7 @@ const createHome = () => {
     projList.setAttribute('id', 'project-list')
     sidebar.appendChild(projList)
 
-    renderProjects(projectsList)
+    renderProjects(getProjects())
 
     //main content//
 
@@ -184,39 +184,6 @@ const createHome = () => {
         pageTitle.textContent = "Today's Tasks"
         content.textContent = "Here's today's tasks"
     })
-
-    //const myProjects = document.getElementsByClassName('project-btn')
-    //for (let btn of myProjects) {
-        //btn.addEventListener('click', () => {
-            //clear(content)
-
-            //const selectedProject = getProjects().find(project => project.title == btn.textContent)
-            
-            //pageTitle.textContent = selectedProject.title
-
-            //const descrContainer = document.createElement('div')
-            //descrContainer.setAttribute('id', 'description-container')
-            //content.appendChild(descrContainer)
-            //descrContainer.textContent = selectedProject.description
-
-            //const tasksContainer = document.createElement('div')
-            //tasksContainer.setAttribute('id', 'tasks')
-            //content.appendChild(tasksContainer)
-
-            //const projectTasks = selectedProject.tasks
-
-            //projectTasks.forEach((task) => {
-                //const taskDiv = document.createElement('div')
-                //taskDiv.setAttribute('class', 'task-container')
-                //taskDiv.innerHTML = `<input type="checkbox">
-                //<span>${task.title}</span>
-                //<span>Due ${task.dueDate}</span>`
-
-                //tasksContainer.appendChild(taskDiv)
-            //})
-
-        //})
-    //}
 
 }
 

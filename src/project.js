@@ -1,3 +1,5 @@
+import { getProjects, saveProjects } from "./storage"
+
 class Project {
     constructor(title, description, tasks = []) {
         this.title = title
@@ -10,7 +12,7 @@ class Project {
     }
 
     removeTask(task) { 
-        this.tasks = this.tasks.filter(item => item !== task); 
+        this.tasks = this.tasks.filter(item => item !== task)
     }
 
     updateProjInfo(attribute, value) {

@@ -2,6 +2,7 @@ import Task from "./task"
 import Project from "./project"
 import createProjectForm from "./project-form"
 import { getProjects, saveProjects} from "./storage"
+import { renderProjectPage } from "./home-page"
 
 const createTaskForm = () => {
 
@@ -51,23 +52,17 @@ const createTaskForm = () => {
         projectSelect.appendChild(option)
     }) 
 
-
     const taskNote = document.getElementById('task-note')
 
     form.addEventListener('submit', (e) => {
         e.preventDefault()
-
         let newTask = new Task(taskTitle.value, taskDueDate.value, projectSelect.value, taskNote.value)
-
         const assignedProject = projectsList.find(project => project.title == projectSelect.value)
-        assignedProject.tasks.push(newTask)
-
+        assignedProject.addTask(newTask)
         saveProjects(projectsList)
-
         form.reset()
+        renderProjectPage(assignedProject)
     })
-
-
 }
 
 export default createTaskForm
