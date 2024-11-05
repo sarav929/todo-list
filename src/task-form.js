@@ -1,4 +1,5 @@
 import Task from "./task"
+
 import { getProjects, saveProjects} from "./storage"
 import { renderProjects, renderProjectPage } from "./render"
 
@@ -18,6 +19,7 @@ const createTaskForm = () => {
     </label>
 
     <label for="task-due-date">Project:
+
         <select name="project" id="project-selection">
         </select>
     </label>
@@ -55,6 +57,7 @@ const createTaskForm = () => {
     form.addEventListener('submit', (e) => {
         e.preventDefault()
         let newTask = new Task(taskTitle.value, taskDueDate.value, projectSelect.value, taskNote.value)
+
         const assignedProject = projectsList.find(project => project.title == projectSelect.value)
         assignedProject.addTask(newTask)
         saveProjects(projectsList)
