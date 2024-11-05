@@ -1,8 +1,6 @@
 import Task from "./task"
-import Project from "./project"
-import createProjectForm from "./project-form"
 import { getProjects, saveProjects} from "./storage"
-import { renderProjectPage } from "./home-page"
+import { renderProjects, renderProjectPage } from "./render"
 
 const createTaskForm = () => {
 
@@ -61,7 +59,9 @@ const createTaskForm = () => {
         assignedProject.addTask(newTask)
         saveProjects(projectsList)
         form.reset()
+        renderProjects(projectsList)
         renderProjectPage(assignedProject)
+        
     })
 }
 

@@ -1,6 +1,5 @@
 import Project from "./project"
-import createHome from "./home-page"
-import { renderNewProject } from "./home-page"
+import { renderNewProject, renderProjectPage } from "./render"
 import { getProjects, saveProjects } from "./storage"
 
 const createProjectForm = () => {
@@ -40,6 +39,7 @@ const createProjectForm = () => {
 
         saveProjects(projectsList)
         renderNewProject(newProject)
+        renderProjectPage(newProject)
         
         form.reset()
     })
