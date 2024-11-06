@@ -2,6 +2,14 @@ import Task from "./task"
 import { getProjects, saveProjects} from "./storage"
 import { renderProjects, renderProjectPage } from "./render"
 import { convertDate } from "./storage"
+import { parse, isFuture } from "date-fns"
+
+// check if date is future when setting dueDate // 
+
+export function isDateInFuture(date, dateFormat) {
+    const parsedDate = parse(date, dateFormat, new Date());
+    return isFuture(parsedDate);
+}
 
 const createTaskForm = () => {
 
@@ -17,6 +25,7 @@ const createTaskForm = () => {
     <label for="task-due-date">Due date:
         <input type="date" id="task-due-date" required>
     </label>
+    <div id="future-date-error" class="error-message hidden"></div>
 
     <label for="task-due-date">Project:
         <select name="project" id="project-selection">
@@ -39,10 +48,20 @@ const createTaskForm = () => {
 
     const taskDueDate = document.getElementById('task-due-date')
 
+    const message = document.getElementById('future-date-error')
+    taskDueDate.addEventListener('input', () => {
+
+        if (!isDateInFuture(taskDueDate.value, 'yyyy-MM-dd')) {
+            message.classList.remove('hidden')
+            message.textContent = 'Select a future date for your task!'
+        } else {
+            message.classList.add('hidden') 
+        }  
+    })
+
     const projectSelect = document.getElementById('project-selection')
 
     let projectsList = getProjects()
-    console.log(projectsList)
 
     projectsList.forEach((project) => {
         const option = document.createElement('option')
@@ -55,12 +74,17 @@ const createTaskForm = () => {
 
     form.addEventListener('submit', (e) => {
         e.preventDefault()
+
+        if (!isDateInFuture(taskDueDate.value, 'yyyy-MM-dd')) {
+            return
+        }
+
         let newTask = new Task(taskTitle.value, convertDate(taskDueDate.value, 'yyyy-MM-dd'), projectSelect.value, taskNote.value)
         const assignedProject = projectsList.find(project => project.title == projectSelect.value)
         assignedProject.addTask(newTask)
+
         saveProjects(projectsList)
         form.reset()
-
         renderProjects(projectsList)
         renderProjectPage(assignedProject)
         
