@@ -179,7 +179,7 @@ function renderTaskEditModal(task) {
         <label for="task-new-note">Note:
             <textarea name="task-note" id="task-new-note">${task.note}</textarea>
         </label>
-        <button type="button">Delete task</button>
+        <button id="delete-task-btn">Delete task</button>
         <button type="submit">Save</button>`
 
     const taskNewTitle = document.getElementById('task-new-title')
@@ -189,6 +189,27 @@ function renderTaskEditModal(task) {
     
     dateValidation(taskNewDate, message)
 
+    const projectsList = getProjects();
+    const assignedProject = projectsList.find(project => project.title === task.project)
+
+    const storageTask = assignedProject.tasks.find(t => t.id === task.id)
+
+    const deleteTask = document.getElementById('delete-task-btn')
+    deleteTask.addEventListener('click', () => {
+        const taskIndex = assignedProject.tasks.findIndex(t => t.id === task.id)
+        if (taskIndex !== -1) {
+            if (confirm('Are you sure you want to delete this project?')) {
+                assignedProject.tasks.splice(taskIndex, 1)
+                saveProjects(projectsList)
+                dialog.close()
+                body.removeChild(dialog)
+                renderProjectPage(assignedProject)
+            }
+            return
+        }
+    })
+
+
     editForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
@@ -196,28 +217,86 @@ function renderTaskEditModal(task) {
             return
         }
 
-        const projectsList = getProjects();
-        const assignedProject = projectsList.find(project => project.title === task.project)
+        if (storageTask) {
+            storageTask.title = taskNewTitle.value
+            storageTask.dueDate = taskNewDate.value
+            storageTask.note = taskNewNote.value
 
-        if (assignedProject) {
-            const storageTask = assignedProject.tasks.find(t => t.id === task.id)
+            saveProjects(projectsList)
 
-            if (storageTask) {
-                storageTask.title = taskNewTitle.value
-                storageTask.dueDate = taskNewDate.value
-                storageTask.note = taskNewNote.value
-
-                saveProjects(projectsList)
-
-                dialog.close()
-                body.removeChild(dialog)
-                renderProjectPage(assignedProject)
-            }
+            dialog.close()
+            body.removeChild(dialog)
+            renderProjectPage(assignedProject)
         }
     })
 }
 
 function renderProjectEditModal(project) {
+    const body = document.querySelector('body')
+    const dialog = document.createElement('dialog')
+    body.appendChild(dialog)
+    dialog.showModal()
+
+    const closeDialog = document.createElement('div')
+    closeDialog.textContent = 'X'
+    dialog.appendChild(closeDialog)
+    closeDialog.addEventListener('click', () => {
+        dialog.close()
+        body.removeChild(dialog)
+    });
+
+    const title = document.createElement('h1')
+    title.textContent = "Edit this project"
+    dialog.appendChild(title);
+
+    const editForm = document.createElement('form')
+    editForm.setAttribute('id', 'project-edit-form')
+    dialog.appendChild(editForm)
+
+    editForm.innerHTML = `<label for="project-new-title">Title:
+    <input type="text" id="project-new-title" value="${project.title}" required>
+    <label for="project-new-description">Description:
+    <input type="text" id="project-new-description" value="${project.description}" required>
+    <button id="delete-project-btn">Delete project</button>
+    <button type="submit">Save</button>`
+
+    const newProjTitle = document.getElementById('project-new-title')
+    const newProjDescr = document.getElementById('project-new-description')
+
+    const projectsList = getProjects();
+    const selectedProject = projectsList.find(p => p.title === project.title)
+
+    const deleteProject = document.getElementById('delete-project-btn')
+    deleteProject.addEventListener('click', () => {
+        if (confirm('Are you sure you want to delete this project?')) {
+            const projectIndex = projectsList.findIndex(p => p.title === project.title)
+            if (projectIndex !== -1) {
+                projectsList.splice(projectIndex, 1)
+                saveProjects(projectsList)
+                dialog.close()
+                body.removeChild(dialog)
+                renderProjects(projectsList)
+            }
+            return
+        }
+    });
+
+    editForm.addEventListener('submit', (e) => {
+        e.preventDefault()
+        selectedProject.title = newProjTitle.value
+        selectedProject.tasks.forEach((task) => {
+            task.project = selectedProject.title
+        })
+        selectedProject.description = newProjDescr.value
+
+        saveProjects(projectsList)
+
+        dialog.close()
+        body.removeChild(dialog)
+        renderProjects(projectsList)
+        renderProjectPage(selectedProject)
+    })
+
     
 }
 
