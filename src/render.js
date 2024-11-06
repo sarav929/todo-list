@@ -2,6 +2,7 @@ import { getProjects, saveProjects } from "./storage"
 import editImg from "../src/icons/edit.svg"
 import expandImg from "../src/icons/expand.svg"
 import { dateValidation, isDateInFuture } from "./task-form"
+import { formatDate } from "./storage"
 
 export function renderNewProject(project) {
     const projectBtn = document.createElement('button')
@@ -30,7 +31,16 @@ export function renderProjects(projectsList) {
 
 export function renderProjectPage(project) {
     const title = document.getElementById('page-title')
+    
     title.textContent = project.title
+
+    const editIcon = document.createElement('img')
+    editIcon.setAttribute('id', 'edit-task')
+    editIcon.src = editImg
+    title.appendChild(editIcon)
+    editIcon.addEventListener('click', () => {
+        renderProjectEditModal(project)
+    })
 
     const content = document.getElementById('content')
     clear(content)
@@ -49,6 +59,8 @@ export function renderProjectPage(project) {
     tasksList.forEach((task) => {
         renderTask(task)
     })
+
+    
 }
 
 export function renderTask(task) {
@@ -90,7 +102,7 @@ export function renderTask(task) {
 
     const date = document.createElement('div')
     name.setAttribute('class', 'task-date')
-    date.textContent = task.dueDate
+    date.textContent = formatDate(task.dueDate)
     taskInfo.appendChild(date)
 
 
@@ -130,12 +142,11 @@ export function renderTask(task) {
     icons.appendChild(editIcon)
 
     editIcon.addEventListener('click', () => {
-        renderEditModal(task)
+        renderTaskEditModal(task)
     })
 }
 
-function renderEditModal(task) {
-
+function renderTaskEditModal(task) {
     const body = document.querySelector('body')
     const dialog = document.createElement('dialog')
     body.appendChild(dialog)
@@ -146,66 +157,70 @@ function renderEditModal(task) {
     dialog.appendChild(closeDialog)
     closeDialog.addEventListener('click', () => {
         dialog.close()
-    })
-    
+        body.removeChild(dialog)
+    });
+
     const title = document.createElement('h1')
     title.textContent = "Edit this task"
-    dialog.appendChild(title)
+    dialog.appendChild(title);
 
     const editForm = document.createElement('form')
     editForm.setAttribute('id', 'task-edit-form')
     dialog.appendChild(editForm)
 
-    const [day, month, year] = task.dueDate.split('-');
-    const formattedDate = `${year}-${month}-${day}`
-
-    editForm.innerHTML = ` 
-    <label for="task-new-title">Title:
-        <input type="text" id="task-new-title" value='${task.title}'required>
-    </label>
-
-    <label for="task-new-due-date">Due date:
-        <input type="date" id="task-new-due-date" value='${formattedDate}' required>
-    </label>
-    <div id="future-date-error" class="error-message hidden"></div>
-
-    <label for="task-new-note">Note:
-        <textarea name="task-note" id="task-new-note">${task.note}</textarea>
-    </label>
-
-    <button type="button">Delete task</button>
-    <button type="submit">Save</button>`
+    editForm.innerHTML = `
+        <label for="task-new-title">Title:
+            <input type="text" id="task-new-title" value="${task.title}" required>
+        </label>
+        <label for="task-new-due-date">Due date:
+            <input type="date" id="task-new-due-date" value="${task.dueDate}" required>
+        </label>
+        <div id="future-date-error" class="error-message hidden"></div>
+        <label for="task-new-note">Note:
+            <textarea name="task-note" id="task-new-note">${task.note}</textarea>
+        </label>
+        <button type="button">Delete task</button>
+        <button type="submit">Save</button>`
 
     const taskNewTitle = document.getElementById('task-new-title')
-
-    const message = document.getElementById('future-date-error')
     const taskNewDate = document.getElementById('task-new-due-date')
-    dateValidation(taskNewDate, message)  
-    
     const taskNewNote = document.getElementById('task-new-note')
+    const message = document.getElementById('future-date-error')
+    
+    dateValidation(taskNewDate, message)
 
     editForm.addEventListener('submit', (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
         if (!isDateInFuture(taskNewDate.value, 'yyyy-MM-dd')) {
             return
         }
 
-        task.updateTaskInfo('title', taskNewTitle.value)
-        task.updateTaskInfo('dueDate', taskNewDate.value)
-        task.updateTaskInfo('note', taskNewNote)
-
         const projectsList = getProjects();
-        const assignedProject = projectsList.find(project => project.tasks.some(t => t === task));
+        const assignedProject = projectsList.find(project => project.title === task.project)
 
         if (assignedProject) {
-            saveProjects(projectsList);
+            const storageTask = assignedProject.tasks.find(t => t.id === task.id)
+
+            if (storageTask) {
+                storageTask.title = taskNewTitle.value
+                storageTask.dueDate = taskNewDate.value
+                storageTask.note = taskNewNote.value
+
+                saveProjects(projectsList)
+
+                dialog.close()
+                body.removeChild(dialog)
+                renderProjectPage(assignedProject)
+            }
         }
-
-        dialog.close()
-
     })
 }
+
+function renderProjectEditModal(project) {
+    
+}
+
 
 export function clear(element) {
     element.innerHTML = ''

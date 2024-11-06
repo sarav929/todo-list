@@ -1,20 +1,19 @@
 import Task from "./task"
-import { getProjects, saveProjects} from "./storage"
+import { convertToDateObj, getProjects, saveProjects} from "./storage"
 import { renderProjects, renderProjectPage } from "./render"
-import { convertDate } from "./storage"
 import { parse, isFuture } from "date-fns"
 
 // check if date is future when setting dueDate // 
 
-export function isDateInFuture(date, dateFormat) {
-    const parsedDate = parse(date, dateFormat, new Date());
+export function isDateInFuture(date) {
+    const parsedDate = parse(date, 'yyyy-MM-dd', new Date());
     return isFuture(parsedDate);
 }
 
 export function dateValidation(input, message) {
     input.addEventListener('input', () => {
 
-        if (!isDateInFuture(input.value, 'yyyy-MM-dd')) {
+        if (!isDateInFuture(input.value)) {
             message.classList.remove('hidden')
             message.textContent = 'Select a future date for your task!'
         } else {
@@ -97,7 +96,7 @@ const createTaskForm = () => {
             return
         }
 
-        let newTask = new Task(taskTitle.value, convertDate(taskDueDate.value, 'yyyy-MM-dd'), projectSelect.value, taskNote.value)
+        let newTask = new Task(taskTitle.value, convertToDateObj(taskDueDate.value), projectSelect.value, taskNote.value)
         const assignedProject = projectsList.find(project => project.title == projectSelect.value)
         assignedProject.addTask(newTask)
 

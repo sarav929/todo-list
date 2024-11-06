@@ -4,10 +4,15 @@ import { parse, format } from 'date-fns'
 
 // date converter //
 
-export function convertDate(date, dateFormat) {
+export function convertToDateObj(date) {
+    const dateFormat = 'yyyy-MM-dd'
     const parsed = parse(date, dateFormat, new Date())
-    const formatted = format(date, 'dd-MM-yyyy')
+    const formatted = format(parsed, 'yyyy-MM-dd')
     return formatted
+}
+
+export function formatDate(date) {
+    return format(date, 'dd-MM-yyyy')
 }
 
 // initialize //
@@ -18,10 +23,8 @@ export function initializeProjects() {
     if (projects === null) {
 
         const defaultProject = new Project("Default Project", "Welcome! Add a new task:")
-        defaultProject.addTask(new Task('do this', convertDate('2024-11-11', 'yyyy-MM-dd'), defaultProject.title))
-        defaultProject.addTask(new Task('do that', convertDate('2024-11-11', 'yyyy-MM-dd'), defaultProject.title))
-
-        console.log(defaultProject)
+        defaultProject.addTask(new Task('do this', convertToDateObj('2024-11-11', 'yyyy-MM-dd'), defaultProject.title))
+        defaultProject.addTask(new Task('do that', convertToDateObj('2024-11-11', 'yyyy-MM-dd'), defaultProject.title))
 
         projects = [defaultProject]
         localStorage.setItem('projects', JSON.stringify(projects))
@@ -41,7 +44,8 @@ export function saveProjects(projects) {
             dueDate: task.dueDate,
             project: task.project,
             note: task.note,
-            isCompleted: task.isCompleted
+            isCompleted: task.isCompleted,
+            id: task.id
         }))
     }));
 
@@ -57,7 +61,7 @@ export function getProjects() {
         return parsedProjects.map(projectData => {
             const project = new Project(projectData.title, projectData.description)
             projectData.tasks.forEach(taskData => {
-                const task = new Task(taskData.title, taskData.dueDate, taskData.project, taskData.note, taskData.isCompleted)
+                const task = new Task(taskData.title, convertToDateObj(taskData.dueDate), taskData.project, taskData.note, taskData.isCompleted, taskData.id)
                 project.addTask(task)
             })
             return project

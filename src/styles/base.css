@@ -125,10 +125,16 @@ input, select, textarea {
     & #expand-task {
         width: 1.5rem;
     }
+}
 
-    & #edit-task {
-        width: 1.3rem;
-    }
+#edit-task {
+    width: 1.3rem;
+}
+
+#page-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .collapsed {

@@ -1,7 +1,7 @@
 import { getProjects, saveProjects } from "./storage"
 
 class Task {
-    constructor(title, dueDate, project, note = "", isCompleted = false, id = Date.now()) {
+    constructor(title, dueDate, project, note = "", isCompleted = false, id = Date.now().toString() + "-" + Math.floor(Math.random() * 1000)) {
         this.title = title
         this.dueDate = dueDate
         this.project = project
