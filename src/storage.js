@@ -17,7 +17,11 @@ export function initializeProjects() {
      
     if (projects === null) {
 
-        const defaultProject = new Project("Default Project", "Welcome! Add a new task:", [new Task('do this', convertDate('2024-11-11', 'yyyy-MM-dd')), new Task('do that', convertDate('2024-11-11', 'yyyy-MM-dd'))])
+        const defaultProject = new Project("Default Project", "Welcome! Add a new task:")
+        defaultProject.addTask(new Task('do this', convertDate('2024-11-11', 'yyyy-MM-dd'), defaultProject.title))
+        defaultProject.addTask(new Task('do that', convertDate('2024-11-11', 'yyyy-MM-dd'), defaultProject.title))
+
+        console.log(defaultProject)
 
         projects = [defaultProject]
         localStorage.setItem('projects', JSON.stringify(projects))

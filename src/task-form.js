@@ -11,6 +11,20 @@ export function isDateInFuture(date, dateFormat) {
     return isFuture(parsedDate);
 }
 
+export function dateValidation(input, message) {
+    input.addEventListener('input', () => {
+
+        if (!isDateInFuture(input.value, 'yyyy-MM-dd')) {
+            message.classList.remove('hidden')
+            message.textContent = 'Select a future date for your task!'
+        } else {
+            message.classList.add('hidden') 
+        }  
+    })
+}
+
+/////
+
 const createTaskForm = () => {
 
     const pageTitle = document.getElementById('page-title')
@@ -27,7 +41,7 @@ const createTaskForm = () => {
     </label>
     <div id="future-date-error" class="error-message hidden"></div>
 
-    <label for="task-due-date">Project:
+    <label for="task-project">Project:
         <select name="project" id="project-selection">
         </select>
     </label>
@@ -49,15 +63,19 @@ const createTaskForm = () => {
     const taskDueDate = document.getElementById('task-due-date')
 
     const message = document.getElementById('future-date-error')
-    taskDueDate.addEventListener('input', () => {
+    dateValidation(taskDueDate, message)
 
-        if (!isDateInFuture(taskDueDate.value, 'yyyy-MM-dd')) {
-            message.classList.remove('hidden')
-            message.textContent = 'Select a future date for your task!'
-        } else {
-            message.classList.add('hidden') 
-        }  
-    })
+    //taskDueDate.addEventListener('input', () => {
+
+        //if (!isDateInFuture(taskDueDate.value, 'yyyy-MM-dd')) {
+            //message.classList.remove('hidden')
+            //message.textContent = 'Select a future date for your task!'
+        //} else {
+            //message.classList.add('hidden') 
+        //}  
+    //})
+
+
 
     const projectSelect = document.getElementById('project-selection')
 
