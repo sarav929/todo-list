@@ -1,14 +1,23 @@
 import Project from "./project"
 import Task from "./task"
+import { parse, format } from 'date-fns'
 
-// initialize // 
+// date converter //
+
+export function convertDate(date, dateFormat) {
+    const parsed = parse(date, dateFormat, new Date())
+    const formatted = format(date, 'dd-MM-yyyy')
+    return formatted
+}
+
+// initialize //
 
 export function initializeProjects() {
     let projects = localStorage.getItem('projects')
      
     if (projects === null) {
 
-        const defaultProject = new Project("Default Project", "Welcome! Add a new task:", [new Task('do this', '11/11/24'), new Task('do that', '14/11/24')])
+        const defaultProject = new Project("Default Project", "Welcome! Add a new task:", [new Task('do this', convertDate('2024-11-11', 'yyyy-MM-dd')), new Task('do that', convertDate('2024-11-11', 'yyyy-MM-dd'))])
 
         projects = [defaultProject]
         localStorage.setItem('projects', JSON.stringify(projects))
@@ -51,10 +60,7 @@ export function getProjects() {
         })
     } else {
         return []
-    }
-    
+    } 
 }
-
-
 
 

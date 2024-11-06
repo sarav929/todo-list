@@ -1,6 +1,7 @@
 import Task from "./task"
 import { getProjects, saveProjects} from "./storage"
 import { renderProjects, renderProjectPage } from "./render"
+import { convertDate } from "./storage"
 
 const createTaskForm = () => {
 
@@ -54,11 +55,12 @@ const createTaskForm = () => {
 
     form.addEventListener('submit', (e) => {
         e.preventDefault()
-        let newTask = new Task(taskTitle.value, taskDueDate.value, projectSelect.value, taskNote.value)
+        let newTask = new Task(taskTitle.value, convertDate(taskDueDate.value, 'yyyy-MM-dd'), projectSelect.value, taskNote.value)
         const assignedProject = projectsList.find(project => project.title == projectSelect.value)
         assignedProject.addTask(newTask)
         saveProjects(projectsList)
         form.reset()
+
         renderProjects(projectsList)
         renderProjectPage(assignedProject)
         
