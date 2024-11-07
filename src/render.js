@@ -1,7 +1,9 @@
 import { getProjects, saveProjects } from "./storage"
-import { findAssignedProject, findProjectInStorage, findTaskInStorage, clear, formatDate, isDateInFuture, dateValidation } from "./helper"
+import { findAssignedProject, findProjectInStorage, findTaskInStorage, clear, formatDate, isDateInFuture, dateValidation, clearCompletedTasks} from "./helper"
 import editImg from "../src/icons/edit.svg"
 import expandImg from "../src/icons/expand.svg"
+
+// render projects and tasks //
 
 export function renderNewProject(project) {
     const projectBtn = document.createElement('button')
@@ -49,6 +51,17 @@ export function renderProjectPage(project) {
     description.textContent = project.description
     content.appendChild(description)
 
+    const clearTasks = document.createElement('button')
+    clearTasks.textContent = 'Clear completed tasks'
+
+    clearTasks.setAttribute('id', 'clear-tasks')
+    content.appendChild(clearTasks)
+
+    clearTasks.addEventListener('click', () => {
+        clearCompletedTasks(project, getProjects())
+        renderProjectPage(findProjectInStorage(project, getProjects()))
+    })
+
     const tasks = document.createElement('div')
     tasks.setAttribute('id', 'tasks-wrapper')
     content.appendChild(tasks)
@@ -83,13 +96,16 @@ export function renderTask(task) {
     // mark as complete/not complete // 
 
     isCompletedCheck.addEventListener('change', () => {
+        const projectList = getProjects()
+        const currentTask = findTaskInStorage(task, projectList)
         if (isCompletedCheck.checked) {
             taskDiv.classList.add('task-completed')
-            task.updateTaskInfo("isCompleted", true)
+            currentTask.updateTaskInfo("isCompleted", true)
         } else {
             taskDiv.classList.remove('task-completed')
-            task.updateTaskInfo("isCompleted", false)
+            currentTask.updateTaskInfo("isCompleted", false)
         }
+        saveProjects(projectList)
     })
 
     collapsed.appendChild(taskInfo)
@@ -169,7 +185,7 @@ function renderModal() {
 }
 
 function renderTaskEditModal(task) {
-
+    
     renderModal()
     const body = document.querySelector('body')
     const editForm = document.querySelector('form')
@@ -196,8 +212,9 @@ function renderTaskEditModal(task) {
     const deleteTask = document.getElementById('delete-task-btn')
 
     const projectsList = getProjects()
-    const storageTask = findTaskInStorage(task, projectsList)
     const assignedProject = findAssignedProject(task, projectsList)
+    const storageTask = findTaskInStorage(task, projectsList)
+    
 
     dateValidation(taskNewDate, message)
 
