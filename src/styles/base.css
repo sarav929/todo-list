@@ -180,3 +180,15 @@ input, select, textarea {
 .error-message {
     color: red;
 }
+
+.high-priority {
+    border: solid red;
+}
+
+.medium-priority {
+    border: solid yellow;
+}
+
+.low-priority {
+    border: solid green;
+}

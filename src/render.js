@@ -160,6 +160,20 @@ export function renderTask(task) {
         })
     }
 
+    switch (task.priority) {
+        case "High":
+            taskDiv.classList.add('high-priority')
+            break
+        case "Medium":
+            taskDiv.classList.add('medium-priority')
+            break
+        case "Low":
+            taskDiv.classList.add('low-priority')
+            break
+        default:
+            break
+    }
+
     const editIcon = document.createElement('img')
     editIcon.setAttribute('id', 'edit-task')
     editIcon.src = editImg
@@ -210,12 +224,25 @@ function renderTaskEditModal(task) {
     <label for="task-new-note">Note:
     <textarea name="task-note" id="task-new-note">${task.note}</textarea>
     </label>
+    <label for="task-new-priority">Priority:
+    <select name="priority" id="task-new-priority">
+    <option value="Low">Low</option>
+    <option value="Medium">Medium</option>
+    <option value="High">High</option>
+    </select>
+    </label>
     <button id="delete-task-btn">Delete task</button>
     <button type="submit">Save</button>`
 
     const taskNewTitle = document.getElementById('task-new-title')
     const taskNewDate = document.getElementById('task-new-due-date')
     const taskNewNote = document.getElementById('task-new-note')
+    const taskNewPriority = document.getElementById('task-new-priority')
+
+    const options = Array.from(document.querySelectorAll('option'))
+    const currentOption = options.find((option) => option.value == task.priority)
+    currentOption.selected = true
+
     const message = document.getElementById('future-date-error')
     const deleteTask = document.getElementById('delete-task-btn')
 
@@ -246,6 +273,7 @@ function renderTaskEditModal(task) {
             storageTask.title = taskNewTitle.value
             storageTask.dueDate = taskNewDate.value
             storageTask.note = taskNewNote.value
+            storageTask.priority = taskNewPriority.value
             saveProjects(projectsList)
             dialog.close()
             body.removeChild(dialog)

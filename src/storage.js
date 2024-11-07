@@ -11,8 +11,8 @@ export function initializeProjects() {
     if (projects === null) {
 
         const defaultProject = new Project("Default Project", "Welcome! Add a new task:")
-        defaultProject.addTask(new Task('do this', convertToDateObj('2024-11-11', 'yyyy-MM-dd'), defaultProject.title))
-        defaultProject.addTask(new Task('do that', convertToDateObj('2024-11-11', 'yyyy-MM-dd'), defaultProject.title))
+        defaultProject.addTask(new Task('do this', convertToDateObj('2024-11-11', 'yyyy-MM-dd'), defaultProject.title, "", "High"))
+        defaultProject.addTask(new Task('do that', convertToDateObj('2024-11-11', 'yyyy-MM-dd'), defaultProject.title, "Note", "Low"))
 
         projects = [defaultProject]
         localStorage.setItem('projects', JSON.stringify(projects))
@@ -32,6 +32,7 @@ export function saveProjects(projects) {
             dueDate: task.dueDate,
             project: task.project,
             note: task.note,
+            priority: task.priority,
             isCompleted: task.isCompleted,
             id: task.id
         }))
@@ -49,7 +50,7 @@ export function getProjects() {
         return parsedProjects.map(projectData => {
             const project = new Project(projectData.title, projectData.description)
             projectData.tasks.forEach(taskData => {
-                const task = new Task(taskData.title, convertToDateObj(taskData.dueDate), taskData.project, taskData.note, taskData.isCompleted, taskData.id)
+                const task = new Task(taskData.title, convertToDateObj(taskData.dueDate), taskData.project, taskData.note, taskData.priority, taskData.isCompleted, taskData.id)
                 project.addTask(task)
             })
             return project

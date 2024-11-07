@@ -19,13 +19,21 @@ const createTaskForm = () => {
     </label>
     <div id="future-date-error" class="error-message hidden"></div>
 
-    <label for="task-project">Project:
+    <label for="project-selection">Project:
         <select name="project" id="project-selection">
         </select>
     </label>
 
     <label for="task-note">Note:
         <textarea name="task-note" id="task-note"></textarea>
+    </label>
+
+    <label for="task-priority">Priority:
+        <select name="priority" id="task-priority">
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+        </select>
     </label>
 
     <button type="submit" id="submit-btn">Add task</button>
@@ -37,6 +45,7 @@ const createTaskForm = () => {
     const form = document.getElementById('task-form')
     const taskTitle = document.getElementById('task-title')
     const taskDueDate = document.getElementById('task-due-date')
+    const taskPriority = document.getElementById('task-priority')
     const message = document.getElementById('future-date-error')
     const submitBtn = document.getElementById('submit-btn')
 
@@ -57,7 +66,7 @@ const createTaskForm = () => {
     form.addEventListener('submit', (e) => {
         e.preventDefault()
 
-        let newTask = new Task(taskTitle.value, convertToDateObj(taskDueDate.value), projectSelect.value, taskNote.value)
+        let newTask = new Task(taskTitle.value, convertToDateObj(taskDueDate.value), projectSelect.value, taskNote.value, taskPriority.value)
         const assignedProject = projectsList.find(project => project.title == projectSelect.value)
         assignedProject.addTask(newTask)
 
