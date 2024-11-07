@@ -106,7 +106,7 @@ export function renderTask(task) {
     taskInfo.appendChild(date)
 
 
-    // delete & edit //
+    // task edit-expand icons //
 
     const icons = document.createElement('div')
     icons.setAttribute('class', 'actions')
@@ -146,7 +146,10 @@ export function renderTask(task) {
     })
 }
 
-function renderTaskEditModal(task) {
+// edit - delete modals //
+
+function renderModal() {
+
     const body = document.querySelector('body')
     const dialog = document.createElement('dialog')
     body.appendChild(dialog)
@@ -160,45 +163,48 @@ function renderTaskEditModal(task) {
         body.removeChild(dialog)
     });
 
-    const title = document.createElement('h1')
-    title.textContent = "Edit this task"
-    dialog.appendChild(title);
-
     const editForm = document.createElement('form')
-    editForm.setAttribute('id', 'task-edit-form')
+    editForm.setAttribute('class', 'edit-form')
     dialog.appendChild(editForm)
+}
 
-    editForm.innerHTML = `
-        <label for="task-new-title">Title:
-            <input type="text" id="task-new-title" value="${task.title}" required>
-        </label>
-        <label for="task-new-due-date">Due date:
-            <input type="date" id="task-new-due-date" value="${task.dueDate}" required>
-        </label>
-        <div id="future-date-error" class="error-message hidden"></div>
-        <label for="task-new-note">Note:
-            <textarea name="task-note" id="task-new-note">${task.note}</textarea>
-        </label>
-        <button id="delete-task-btn">Delete task</button>
-        <button type="submit">Save</button>`
+function renderTaskEditModal(task) {
+
+    renderModal()
+    const body = document.querySelector('body')
+    const editForm = document.querySelector('form')
+    const dialog = document.querySelector('dialog')
+    editForm.setAttribute('id', 'task-edit-form')
+
+    editForm.innerHTML = `<label for="task-new-title">Title:
+    <input type="text" id="task-new-title" value="${task.title}" required>
+    </label>
+    <label for="task-new-due-date">Due date:
+    <input type="date" id="task-new-due-date" value="${task.dueDate}" required>
+    </label>
+    <div id="future-date-error" class="error-message hidden"></div>
+    <label for="task-new-note">Note:
+    <textarea name="task-note" id="task-new-note">${task.note}</textarea>
+    </label>
+    <button id="delete-task-btn">Delete task</button>
+    <button type="submit">Save</button>`
 
     const taskNewTitle = document.getElementById('task-new-title')
     const taskNewDate = document.getElementById('task-new-due-date')
     const taskNewNote = document.getElementById('task-new-note')
     const message = document.getElementById('future-date-error')
-    
+    const deleteTask = document.getElementById('delete-task-btn')
+
+    const projectsList = getProjects()
+    const storageTask = findTaskInStorage(task, projectsList)
+    const assignedProject = findAssignedProject(task, projectsList)
+
     dateValidation(taskNewDate, message)
 
-    const projectsList = getProjects();
-    const assignedProject = projectsList.find(project => project.title === task.project)
-
-    const storageTask = assignedProject.tasks.find(t => t.id === task.id)
-
-    const deleteTask = document.getElementById('delete-task-btn')
     deleteTask.addEventListener('click', () => {
         const taskIndex = assignedProject.tasks.findIndex(t => t.id === task.id)
         if (taskIndex !== -1) {
-            if (confirm('Are you sure you want to delete this project?')) {
+            if (confirm('Are you sure you want to delete this task?')) {
                 assignedProject.tasks.splice(taskIndex, 1)
                 saveProjects(projectsList)
                 dialog.close()
@@ -209,21 +215,16 @@ function renderTaskEditModal(task) {
         }
     })
 
-
     editForm.addEventListener('submit', (e) => {
         e.preventDefault();
-
         if (!isDateInFuture(taskNewDate.value, 'yyyy-MM-dd')) {
             return
         }
-
         if (storageTask) {
             storageTask.title = taskNewTitle.value
             storageTask.dueDate = taskNewDate.value
             storageTask.note = taskNewNote.value
-
             saveProjects(projectsList)
-
             dialog.close()
             body.removeChild(dialog)
             renderProjectPage(assignedProject)
@@ -232,26 +233,11 @@ function renderTaskEditModal(task) {
 }
 
 function renderProjectEditModal(project) {
+    renderModal()
     const body = document.querySelector('body')
-    const dialog = document.createElement('dialog')
-    body.appendChild(dialog)
-    dialog.showModal()
-
-    const closeDialog = document.createElement('div')
-    closeDialog.textContent = 'X'
-    dialog.appendChild(closeDialog)
-    closeDialog.addEventListener('click', () => {
-        dialog.close()
-        body.removeChild(dialog)
-    });
-
-    const title = document.createElement('h1')
-    title.textContent = "Edit this project"
-    dialog.appendChild(title);
-
-    const editForm = document.createElement('form')
+    const editForm = document.querySelector('form')
+    const dialog = document.querySelector('dialog')
     editForm.setAttribute('id', 'project-edit-form')
-    dialog.appendChild(editForm)
 
     editForm.innerHTML = `<label for="project-new-title">Title:
     <input type="text" id="project-new-title" value="${project.title}" required>
@@ -262,11 +248,11 @@ function renderProjectEditModal(project) {
 
     const newProjTitle = document.getElementById('project-new-title')
     const newProjDescr = document.getElementById('project-new-description')
-
-    const projectsList = getProjects();
-    const selectedProject = projectsList.find(p => p.title === project.title)
-
     const deleteProject = document.getElementById('delete-project-btn')
+
+    const projectsList = getProjects()
+    const selectedProject = findProjectInStorage(project, projectsList)
+
     deleteProject.addEventListener('click', () => {
         if (confirm('Are you sure you want to delete this project?')) {
             const projectIndex = projectsList.findIndex(p => p.title === project.title)
@@ -295,11 +281,26 @@ function renderProjectEditModal(project) {
         body.removeChild(dialog)
         renderProjects(projectsList)
         renderProjectPage(selectedProject)
-    })
-
-    
+    }) 
 }
 
+// helper functions //
+
+function findProjectInStorage(project, projects) {
+    const selectedProject = projects.find(p => p.title === project.title)
+    return selectedProject
+}
+
+function findTaskInStorage(task, projects) {
+    const assignedProject = projects.find(project => project.title === task.project)
+    const storageTask = assignedProject.tasks.find(t => t.id === task.id)
+    return storageTask
+}
+
+function findAssignedProject(task, projects) {
+    const assignedProject = projects.find(project => project.title === task.project)
+    return assignedProject
+}
 
 export function clear(element) {
     element.innerHTML = ''
