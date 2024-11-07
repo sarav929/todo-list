@@ -13,13 +13,13 @@ const createProjectForm = () => {
     <label for="project-title">Title:
         <input type="text" id="project-title" required>
     </label>
-    <div id="title-error" class="title-error hidden"></div>
+    <div id="title-error" class="error-message hidden"></div>
 
     <label for="project-title">Description:
         <input type="text" id="project-description">
     </label>
 
-    <button type="submit">Create project</button>
+    <button type="submit" id="submit-btn">Create project</button>
 
     </form>`
 
@@ -27,8 +27,9 @@ const createProjectForm = () => {
 
     const projTitle = document.getElementById('project-title')
     const message = document.getElementById('title-error')
+    const submitBtn = document.getElementById('submit-btn')
 
-    titleValidation(projTitle, message)
+    titleValidation(projTitle, message, submitBtn)
 
     const projDescription = document.getElementById("project-description")
 

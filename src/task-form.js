@@ -28,7 +28,7 @@ const createTaskForm = () => {
         <textarea name="task-note" id="task-note"></textarea>
     </label>
 
-    <button type="submit">Add task</button>
+    <button type="submit" id="submit-btn">Add task</button>
 
     </form>`
 
@@ -38,8 +38,9 @@ const createTaskForm = () => {
     const taskTitle = document.getElementById('task-title')
     const taskDueDate = document.getElementById('task-due-date')
     const message = document.getElementById('future-date-error')
+    const submitBtn = document.getElementById('submit-btn')
 
-    dateValidation(taskDueDate, message)
+    dateValidation(taskDueDate, message, submitBtn)
 
     const projectSelect = document.getElementById('project-selection')
     const projectsList = getProjects()
@@ -55,10 +56,6 @@ const createTaskForm = () => {
 
     form.addEventListener('submit', (e) => {
         e.preventDefault()
-
-        if (!isDateInFuture(taskDueDate.value, 'yyyy-MM-dd')) {
-            return
-        }
 
         let newTask = new Task(taskTitle.value, convertToDateObj(taskDueDate.value), projectSelect.value, taskNote.value)
         const assignedProject = projectsList.find(project => project.title == projectSelect.value)
