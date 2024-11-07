@@ -1,8 +1,7 @@
 import { getProjects, saveProjects } from "./storage"
+import { findAssignedProject, findProjectInStorage, findTaskInStorage, clear, formatDate, isDateInFuture, dateValidation } from "./helper"
 import editImg from "../src/icons/edit.svg"
 import expandImg from "../src/icons/expand.svg"
-import { dateValidation, isDateInFuture } from "./task-form"
-import { formatDate } from "./storage"
 
 export function renderNewProject(project) {
     const projectBtn = document.createElement('button')
@@ -116,11 +115,12 @@ export function renderTask(task) {
     expandIcon.setAttribute('id', 'expand-task')
     expandIcon.src = expandImg
     icons.appendChild(expandIcon)
+
     if (task.note == '') {
-        expandIcon.style.visibility = 'hidden'
+        expandIcon.classList.add('hidden')
     } else {
         const expanded = document.createElement('div')
-        expanded.setAttribute('class', 'expanded')
+        expanded.setAttribute('class', 'not-expanded')
         taskDiv.appendChild(expanded)
         const note = document.createElement('div')
         name.setAttribute('class', 'task-note')
@@ -128,10 +128,10 @@ export function renderTask(task) {
         expanded.appendChild(note)
 
         expandIcon.addEventListener('click', () => {
-            if (expanded.style.display == 'none') {
-                expanded.style.display = 'block'
+            if (expanded.classList.contains('not-expanded')) {
+                expanded.classList.replace('not-expanded', 'expanded')
             } else {
-                expanded.style.display = 'none'
+                expanded.classList.replace('expanded', 'not-expanded')
             }      
         })
     }
@@ -269,11 +269,11 @@ function renderProjectEditModal(project) {
 
     editForm.addEventListener('submit', (e) => {
         e.preventDefault()
-        selectedProject.title = newProjTitle.value
+        selectedProject.updateProjInfo('title', newProjTitle.value)
         selectedProject.tasks.forEach((task) => {
-            task.project = selectedProject.title
+            task.updateTaskInfo('project', selectedProject.title)
         })
-        selectedProject.description = newProjDescr.value
+        selectedProject.updateProjInfo("description", newProjDescr.value)
 
         saveProjects(projectsList)
 
@@ -283,26 +283,3 @@ function renderProjectEditModal(project) {
         renderProjectPage(selectedProject)
     }) 
 }
-
-// helper functions //
-
-function findProjectInStorage(project, projects) {
-    const selectedProject = projects.find(p => p.title === project.title)
-    return selectedProject
-}
-
-function findTaskInStorage(task, projects) {
-    const assignedProject = projects.find(project => project.title === task.project)
-    const storageTask = assignedProject.tasks.find(t => t.id === task.id)
-    return storageTask
-}
-
-function findAssignedProject(task, projects) {
-    const assignedProject = projects.find(project => project.title === task.project)
-    return assignedProject
-}
-
-export function clear(element) {
-    element.innerHTML = ''
-}
-

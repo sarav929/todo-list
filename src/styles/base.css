@@ -149,11 +149,19 @@ input, select, textarea {
 }
 
 .hidden {
+    visibility: hidden;
+}
+
+.visible {
+    visibility: visible;
+}
+
+.not-expanded {
     display: none;
 }
 
 .expanded {
-    display: none;
+    display: block;
     padding: 1rem;
 }
 

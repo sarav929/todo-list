@@ -1,19 +1,7 @@
 import Project from "./project"
 import Task from "./task"
-import { parse, format } from 'date-fns'
 
-// date converter //
-
-export function convertToDateObj(date) {
-    const dateFormat = 'yyyy-MM-dd'
-    const parsed = parse(date, dateFormat, new Date())
-    const formatted = format(parsed, 'yyyy-MM-dd')
-    return formatted
-}
-
-export function formatDate(date) {
-    return format(date, 'dd-MM-yyyy')
-}
+import { convertToDateObj } from "./helper"
 
 // initialize //
 

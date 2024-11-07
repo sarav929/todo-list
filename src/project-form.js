@@ -27,8 +27,6 @@ const createProjectForm = () => {
 
     const projDescription = document.getElementById("project-description")
 
-    // retrieve projects //
-
     let projectsList = getProjects()
 
     form.addEventListener('submit', (e) => {

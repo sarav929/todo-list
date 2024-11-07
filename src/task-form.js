@@ -1,28 +1,7 @@
 import Task from "./task"
-import { convertToDateObj, getProjects, saveProjects} from "./storage"
+import { getProjects, saveProjects} from "./storage"
 import { renderProjects, renderProjectPage } from "./render"
-import { parse, isFuture } from "date-fns"
-
-// check if date is future when setting dueDate // 
-
-export function isDateInFuture(date) {
-    const parsedDate = parse(date, 'yyyy-MM-dd', new Date());
-    return isFuture(parsedDate);
-}
-
-export function dateValidation(input, message) {
-    input.addEventListener('input', () => {
-
-        if (!isDateInFuture(input.value)) {
-            message.classList.remove('hidden')
-            message.textContent = 'Select a future date for your task!'
-        } else {
-            message.classList.add('hidden') 
-        }  
-    })
-}
-
-/////
+import { isDateInFuture, dateValidation, convertToDateObj } from "./helper"
 
 const createTaskForm = () => {
 
@@ -56,29 +35,14 @@ const createTaskForm = () => {
     // add functionality to form // 
 
     const form = document.getElementById('task-form')
-
     const taskTitle = document.getElementById('task-title')
-
     const taskDueDate = document.getElementById('task-due-date')
-
     const message = document.getElementById('future-date-error')
+
     dateValidation(taskDueDate, message)
 
-    //taskDueDate.addEventListener('input', () => {
-
-        //if (!isDateInFuture(taskDueDate.value, 'yyyy-MM-dd')) {
-            //message.classList.remove('hidden')
-            //message.textContent = 'Select a future date for your task!'
-        //} else {
-            //message.classList.add('hidden') 
-        //}  
-    //})
-
-
-
     const projectSelect = document.getElementById('project-selection')
-
-    let projectsList = getProjects()
+    const projectsList = getProjects()
 
     projectsList.forEach((project) => {
         const option = document.createElement('option')
