@@ -219,17 +219,25 @@ function renderTaskEditModal(task) {
     dateValidation(taskNewDate, message)
 
     deleteTask.addEventListener('click', () => {
-        const taskIndex = assignedProject.tasks.findIndex(t => t.id === task.id)
-        if (taskIndex !== -1) {
-            if (confirm('Are you sure you want to delete this task?')) {
-                assignedProject.tasks.splice(taskIndex, 1)
-                saveProjects(projectsList)
-                dialog.close()
-                body.removeChild(dialog)
-                renderProjectPage(assignedProject)
-            }
-            return
+        //const taskIndex = assignedProject.tasks.findIndex(t => t.id === task.id)
+        //if (taskIndex !== -1) {
+            //if (confirm('Are you sure you want to delete this task?')) {
+                //assignedProject.tasks.splice(taskIndex, 1)
+                //saveProjects(projectsList)
+                //dialog.close()
+                //body.removeChild(dialog)
+                //renderProjectPage(assignedProject)
+            //}
+            //return
+        //}
+        if (confirm('Are you sure you want to delete this task?')) {
+            assignedProject.removeTask(storageTask)
+            saveProjects(projectsList)
+            dialog.close()
+            body.removeChild(dialog)
+            renderProjectPage(assignedProject)
         }
+        return
     })
 
     editForm.addEventListener('submit', (e) => {
