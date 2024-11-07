@@ -68,6 +68,14 @@ export function renderProjectPage(project) {
 
     const tasksList = project.tasks
 
+    if (tasksList.length == 0) {
+        const noTasks = document.createElement('div')
+        noTasks.setAttribute('class', 'no-tasks-to-display')
+        noTasks.textContent = "No tasks. You're all caught up!"
+        content.appendChild(noTasks)
+        content.removeChild(clearTasks)
+    }
+
     tasksList.forEach((task) => {
         renderTask(task)
     })
