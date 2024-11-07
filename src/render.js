@@ -2,6 +2,7 @@ import { getProjects, saveProjects } from "./storage"
 import { findAssignedProject, findProjectInStorage, findTaskInStorage, clear, formatDate, isDateInFuture, dateValidation, clearCompletedTasks, getTodayTasks, getWeekTasks, getOverdueTasks } from "./helper"
 import editImg from "../src/icons/edit.svg"
 import expandImg from "../src/icons/expand.svg"
+import createProjectForm from "./project-form"
 
 // render projects and tasks //
 
@@ -22,6 +23,11 @@ export function renderNewProject(project) {
 }
 
 export function renderProjects(projectsList) {
+
+    if (projectsList.length == 0) {
+        const content = document.getElementById('content')
+        content.textContent = "No projects. You're all caught up!"
+    }
 
     clear(document.getElementById('project-list'))
 
@@ -306,6 +312,8 @@ function renderTaskEditModal(task) {
 function renderProjectEditModal(project) {
     renderModal()
     const body = document.querySelector('body')
+    const pageTitle = document.getElementById('page-title')
+    const content = document.getElementById('content')
     const editForm = document.querySelector('form')
     const dialog = document.querySelector('dialog')
     editForm.setAttribute('id', 'project-edit-form')
@@ -333,6 +341,7 @@ function renderProjectEditModal(project) {
                 dialog.close()
                 body.removeChild(dialog)
                 renderProjects(projectsList)
+                clear(pageTitle)
             }
             return
         }

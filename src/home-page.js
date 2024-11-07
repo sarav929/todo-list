@@ -55,9 +55,7 @@ const createHome = () => {
 
     const projList = document.createElement('div')
     projList.setAttribute('id', 'project-list')
-    sidebar.appendChild(projList)
-
-    renderProjects(getProjects())
+    sidebar.appendChild(projList)    
 
     //main content//
 
@@ -79,6 +77,8 @@ const createHome = () => {
     main.appendChild(content)
     header.appendChild(pageTitle)
     header.appendChild(newTask)
+
+    renderProjects(getProjects())
 
     // nav handle click // 
 
