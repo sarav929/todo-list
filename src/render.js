@@ -1,5 +1,5 @@
 import { getProjects, saveProjects } from "./storage"
-import { findAssignedProject, findProjectInStorage, findTaskInStorage, clear, formatDate, isDateInFuture, dateValidation, clearCompletedTasks} from "./helper"
+import { findAssignedProject, findProjectInStorage, findTaskInStorage, clear, formatDate, isDateInFuture, dateValidation, clearCompletedTasks, getTodayTasks, getWeekTasks, getOverdueTasks } from "./helper"
 import editImg from "../src/icons/edit.svg"
 import expandImg from "../src/icons/expand.svg"
 
@@ -100,6 +100,10 @@ export function renderTask(task) {
     const isCompletedCheck = document.createElement('input')
     isCompletedCheck.setAttribute('type', 'checkbox')
     collapsed.appendChild(isCompletedCheck)
+    isCompletedCheck.checked = task.isCompleted
+    if (isCompletedCheck.checked) {
+        taskDiv.classList.add('task-completed')
+    }    
 
     // mark as complete/not complete // 
 
@@ -184,6 +188,24 @@ export function renderTask(task) {
     })
 }
 
+function renderFilteredTasks(tasks, message) {
+    if (tasks.length == 0) {
+        const content = document.getElementById('content')
+        const noTasks = document.createElement('div')
+        noTasks.setAttribute('class', 'no-tasks-to-display')
+        noTasks.textContent = message
+        content.appendChild(noTasks)
+    } else {
+        const taskWrap = document.createElement('div')
+        taskWrap.setAttribute('id', 'tasks-wrapper')
+        content.appendChild(taskWrap)
+
+        tasks.forEach((task) => {
+            renderTask(task)
+        })
+    }
+}
+
 // edit - delete modals //
 
 function renderModal() {
@@ -232,7 +254,7 @@ function renderTaskEditModal(task) {
     </select>
     </label>
     <button id="delete-task-btn">Delete task</button>
-    <button type="submit">Save</button>`
+    <button type="submit" id="submit-btn">Save</button>`
 
     const taskNewTitle = document.getElementById('task-new-title')
     const taskNewDate = document.getElementById('task-new-due-date')
@@ -249,9 +271,10 @@ function renderTaskEditModal(task) {
     const projectsList = getProjects()
     const assignedProject = findAssignedProject(task, projectsList)
     const storageTask = findTaskInStorage(task, projectsList)
+    const submitBtn = document.getElementById('submit-btn')
     
 
-    dateValidation(taskNewDate, message)
+    dateValidation(taskNewDate, message, submitBtn)
 
     deleteTask.addEventListener('click', () => {
         if (confirm('Are you sure you want to delete this task?')) {
@@ -265,10 +288,8 @@ function renderTaskEditModal(task) {
     })
 
     editForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        if (!isDateInFuture(taskNewDate.value, 'yyyy-MM-dd')) {
-            return
-        }
+        e.preventDefault()
+
         if (storageTask) {
             storageTask.title = taskNewTitle.value
             storageTask.dueDate = taskNewDate.value
@@ -333,3 +354,37 @@ function renderProjectEditModal(project) {
         renderProjectPage(selectedProject)
     }) 
 }
+
+// task filtering //
+
+export function renderToday() {
+    const content = document.getElementById('content')
+    clear(content)
+    const title = document.getElementById('page-title')
+    title.textContent = "Today's tasks"
+
+    const todayTasks = getTodayTasks(getProjects())
+    renderFilteredTasks(todayTasks, 'No tasks are due today.')
+}
+
+export function renderWeek() {
+    const content = document.getElementById('content')
+    clear(content)
+    const title = document.getElementById('page-title')
+    title.textContent = "This Week's tasks"
+
+    const weekTasks = getWeekTasks(getProjects())
+    renderFilteredTasks(weekTasks, 'No tasks are due this week.')
+}
+
+export function renderOverdue() {
+    const content = document.getElementById('content')
+    clear(content)
+    const title = document.getElementById('page-title')
+    title.textContent = "Overdue tasks"
+
+    const overdueTasks = getOverdueTasks(getProjects())
+    
+    renderFilteredTasks(overdueTasks, 'No overdue tasks.')
+}
+

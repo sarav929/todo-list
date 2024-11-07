@@ -66,7 +66,7 @@ const createTaskForm = () => {
     form.addEventListener('submit', (e) => {
         e.preventDefault()
 
-        let newTask = new Task(taskTitle.value, convertToDateObj(taskDueDate.value), projectSelect.value, taskNote.value, taskPriority.value)
+        let newTask = new Task(taskTitle.value, convertToDateObj(taskDueDate.value), projectSelect.value, taskNote.value, taskPriority.value, false)
         const assignedProject = projectsList.find(project => project.title == projectSelect.value)
         assignedProject.addTask(newTask)
 
