@@ -1,21 +1,19 @@
+import { getProjects, saveProjects } from "./storage"
+
 class Task {
-    constructor(title, dueDate, note = "", checklist = []) {
+    constructor(title, dueDate, project, note = "", priority, isCompleted = false, id = Date.now().toString() + "-" + Math.floor(Math.random() * 1000)) {
         this.title = title
         this.dueDate = dueDate
+        this.project = project
         this.note = note
-        this.checklist = checklist
-    }
-
-    addChecklist(check) {
-        this.checklist.push(check)
-    }
-
-    removeChecklist(check) {
-        this.checklist.filter(item => item !== check)
+        this.priority = priority
+        this.isCompleted = isCompleted
+        this.id = id
     }
 
     updateTaskInfo(attribute, value) {
         this[attribute] = value
+        saveProjects(getProjects())
     }
 }
 
