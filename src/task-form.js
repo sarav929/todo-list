@@ -1,4 +1,5 @@
 import Task from "./task"
+
 import { getProjects, saveProjects} from "./storage"
 import { renderProjects, renderProjectPage } from "./render"
 import { isDateInFuture, dateValidation, convertToDateObj } from "./helper"
@@ -19,7 +20,9 @@ const createTaskForm = () => {
     </label>
     <div id="future-date-error" class="error-message hidden"></div>
 
+
     <label for="project-selection">Project:
+
         <select name="project" id="project-selection">
         </select>
     </label>
@@ -65,8 +68,9 @@ const createTaskForm = () => {
 
     form.addEventListener('submit', (e) => {
         e.preventDefault()
-
+      
         let newTask = new Task(taskTitle.value, convertToDateObj(taskDueDate.value), projectSelect.value, taskNote.value, taskPriority.value, false)
+        
         const assignedProject = projectsList.find(project => project.title == projectSelect.value)
         assignedProject.addTask(newTask)
 
