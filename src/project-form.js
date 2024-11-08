@@ -1,6 +1,7 @@
 import Project from "./project"
 import { renderNewProject, renderProjectPage } from "./render"
 import { getProjects, saveProjects } from "./storage"
+import { titleValidation } from "./helper"
 
 const createProjectForm = () => {
 
@@ -12,24 +13,27 @@ const createProjectForm = () => {
     <label for="project-title">Title:
         <input type="text" id="project-title" required>
     </label>
+    <div id="title-error" class="error-message hidden"></div>
 
     <label for="project-title">Description:
         <input type="text" id="project-description">
     </label>
 
-    <button type="submit">Create project</button>
+    <button type="submit" id="submit-btn">Create project</button>
 
     </form>`
 
     const form = document.getElementById('project-form')
 
     const projTitle = document.getElementById('project-title')
+    const message = document.getElementById('title-error')
+    const submitBtn = document.getElementById('submit-btn')
+
+    titleValidation(projTitle, message, submitBtn)
 
     const projDescription = document.getElementById("project-description")
 
-    // retrieve projects //
-
-    let projectsList = getProjects()
+    const projectsList = getProjects()
 
     form.addEventListener('submit', (e) => {
         e.preventDefault()

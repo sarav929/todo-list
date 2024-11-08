@@ -1,5 +1,3 @@
-import { getProjects, saveProjects } from "./storage"
-
 class Project {
     constructor(title, description, tasks = []) {
         this.title = title

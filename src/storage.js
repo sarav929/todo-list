@@ -1,14 +1,18 @@
 import Project from "./project"
 import Task from "./task"
 
-// initialize // 
+import { findAssignedProject, findProjectInStorage, findTaskInStorage, clear, formatDate, isDateInFuture, dateValidation, convertToDateObj } from "./helper"
+
+// initialize //
 
 export function initializeProjects() {
     let projects = localStorage.getItem('projects')
      
     if (projects === null) {
 
-        const defaultProject = new Project("Default Project", "Welcome! Add a new task:", [new Task('do this', '11/11/24'), new Task('do that', '14/11/24')])
+        const defaultProject = new Project("Default Project", "Welcome! Add a new task:")
+        defaultProject.addTask(new Task('do this', convertToDateObj('2024-11-11', 'yyyy-MM-dd'), defaultProject.title, "", "High"))
+        defaultProject.addTask(new Task('do that', convertToDateObj('2024-11-11', 'yyyy-MM-dd'), defaultProject.title, "Note", "Low"))
 
         projects = [defaultProject]
         localStorage.setItem('projects', JSON.stringify(projects))
@@ -28,7 +32,9 @@ export function saveProjects(projects) {
             dueDate: task.dueDate,
             project: task.project,
             note: task.note,
-            isCompleted: task.isCompleted
+            priority: task.priority,
+            isCompleted: task.isCompleted,
+            id: task.id
         }))
     }));
 
@@ -44,17 +50,14 @@ export function getProjects() {
         return parsedProjects.map(projectData => {
             const project = new Project(projectData.title, projectData.description)
             projectData.tasks.forEach(taskData => {
-                const task = new Task(taskData.title, taskData.dueDate, taskData.project, taskData.note, taskData.isCompleted)
+                const task = new Task(taskData.title, convertToDateObj(taskData.dueDate), taskData.project, taskData.note, taskData.priority, taskData.isCompleted, taskData.id)
                 project.addTask(task)
             })
             return project
         })
     } else {
         return []
-    }
-    
+    } 
 }
-
-
 
 

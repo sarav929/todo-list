@@ -117,9 +117,59 @@ input, select, textarea {
 
 .task {
     display: flex;
+    flex-direction: column;
     border: black solid;
-    justify-content: space-evenly;
+    align-items: center;
     padding: .5rem;
+
+    & #expand-task {
+        width: 1.5rem;
+    }
+}
+
+#edit-task {
+    width: 1.3rem;
+}
+
+#page-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.collapsed {
+    display: flex;
+    width: 100%;
+}
+
+.task-info {
+    display: flex;
+    justify-content:space-around;
+    width: 80%;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.visible {
+    visibility: visible;
+}
+
+.not-expanded {
+    display: none;
+}
+
+.expanded {
+    display: block;
+    padding: 1rem;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    justify-self: flex-end;
 }
 
 .task-completed {
@@ -127,3 +177,18 @@ input, select, textarea {
     color: rgba(0, 0, 0, 0.298); 
 }
 
+.error-message {
+    color: red;
+}
+
+.high-priority {
+    border: solid red;
+}
+
+.medium-priority {
+    border: solid yellow;
+}
+
+.low-priority {
+    border: solid green;
+}

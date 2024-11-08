@@ -1,7 +1,7 @@
 import createTaskForm from "./task-form"
 import createProjectForm from "./project-form"
 import { getProjects } from "./storage"
-import { renderProjects } from "./render"
+import { renderProjects, renderToday, renderWeek, renderOverdue } from "./render"
 
 const createHome = () => {
     const body = document.querySelector('body')
@@ -27,8 +27,20 @@ const createHome = () => {
 
     const today = document.createElement('button')
     today.setAttribute('class', 'nav-btn')
-    today.textContent = "Today's Tasks"
+    today.textContent = "Today"
     btnWrapper.appendChild(today)
+
+    const week = document.createElement('button')
+    week.setAttribute('class', 'nav-btn')
+    week.textContent = "This Week"
+    btnWrapper.appendChild(week)
+
+    const overdue = document.createElement('button')
+    overdue.setAttribute('class', 'nav-btn')
+    overdue.textContent = "Overdue"
+    btnWrapper.appendChild(overdue)
+
+
 
     // projects section //
     
@@ -43,9 +55,7 @@ const createHome = () => {
 
     const projList = document.createElement('div')
     projList.setAttribute('id', 'project-list')
-    sidebar.appendChild(projList)
-
-    renderProjects(getProjects())
+    sidebar.appendChild(projList)    
 
     //main content//
 
@@ -68,6 +78,8 @@ const createHome = () => {
     header.appendChild(pageTitle)
     header.appendChild(newTask)
 
+    renderProjects(getProjects())
+
     // nav handle click // 
 
     newTask.addEventListener('click', () => {
@@ -79,8 +91,15 @@ const createHome = () => {
     })
 
     today.addEventListener('click', () => {
-        pageTitle.textContent = "Today's Tasks"
-        content.textContent = "Here's today's tasks"
+        renderToday()
+    })
+
+    week.addEventListener('click', () => {
+        renderWeek()
+    })
+
+    overdue.addEventListener('click', () => {
+        renderOverdue()
     })
 
 }
