@@ -1,7 +1,7 @@
 import Project from "./project"
 import Task from "./task"
 
-import { findAssignedProject, findProjectInStorage, findTaskInStorage, clear, formatDate, isDateInFuture, dateValidation, convertToDateObj } from "./helper"
+import { convertToDateObj } from "./helper"
 
 // initialize //
 

@@ -1,7 +1,7 @@
 import Task from "./task"
 import { getProjects, saveProjects} from "./storage"
 import { renderProjects, renderProjectPage } from "./render"
-import { isDateInFuture, dateValidation, convertToDateObj } from "./helper"
+import { dateValidation, convertToDateObj } from "./helper"
 
 const createTaskForm = (project) => {
 
