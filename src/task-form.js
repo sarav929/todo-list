@@ -12,25 +12,26 @@ const createTaskForm = (project) => {
 
     pageTitle.textContent = `${project.title} » new task`
     content.innerHTML = `<form id="task-form"> 
-    <label for="task-title">Title:
-        <input type="text" id="task-title" maxlength="20" required>
+    <label for="task-title"><p>Title</p>
+    <input type="text" id="task-title" maxlength="20" required>
     </label>
 
-    <label for="task-due-date">Due date:
-        <input type="date" id="task-due-date" required>
+    <label for="task-due-date"><p>Due Date</p>
+    <input type="date" id="task-due-date" required>
     </label>
+
     <div id="future-date-error" class="error-message hidden"></div>
 
-    <label for="task-note">Note:
-        <textarea name="task-note" id="task-note"></textarea>
+    <label for="task-note"><p>Note</p>
+    <textarea name="task-note" id="task-note" maxlength="200"></textarea>
     </label>
 
-    <label for="task-priority">Priority:
-        <select name="priority" id="task-priority">
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-        </select>
+    <label for="task-priority"><p>Priority</p>
+    <select name="priority" id="task-priority">
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+    </select>
     </label>
 
     <button type="submit" id="submit-btn">Add task</button>

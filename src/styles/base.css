@@ -9,7 +9,7 @@
 }
 
 :root {
-    --shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    --shadow: rgba(29, 25, 25, 0.16) 0px 1px 4px;
     --light-white: #f7f7f7;
     --light-grey: #eeeeee;
     --text-color: #313d40;
@@ -137,6 +137,10 @@ button {
     box-shadow: var(--shadow);
     border-radius: 10px;
     padding:.5rem;
+    font-size: 1rem;
+    letter-spacing: .1rem;
+    padding: 1rem;
+    margin: .5rem;
 }
 
 button:hover {
@@ -173,87 +177,13 @@ header {
     flex-direction: column;
     align-items: center;
     padding: 2rem;
-    gap: 2rem;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1.5rem;
-}
-
-input, select, textarea {
-    width: 40vw;
-}
-
-label {
-    display: flex;
-    flex-direction: column;
-}
-  
-input {
-    border: 1px solid gray;
-    border-radius: 6px;
-    position: relative;
-    margin: 10px;
-    line-height: 6ex;
-}
-
-#tasks-wrapper { 
-    display: flex;
-    flex-direction: column;
-    min-width: 80%;
-    gap: 3rem;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-
-    & input {
-        width: 1rem;
-    }
-
-
-}
-
-.task {
-    display: flex;
-    flex-direction: column;
-    border: black solid;
-    align-items: center;
-    padding: .5rem;
-    border: solid .1rem rgba(0, 0, 0, 0.225);
-    border-radius: 10px;
-    box-shadow: var(--shadow);
-
-    & #expand-task {
-        width: 1.5rem;
-    }
-
-    #edit-task {
-        width: 1.3rem;
-    }
-}
-
-#edit-task {
-    width: 1.5rem;
+    gap: 1rem;
 }
 
 #page-title {
     display: flex;
     align-items: center;
     gap: 1rem;
-}
-
-.collapsed {
-    display: flex;
-    width: 100%;
-}
-
-.task-info {
-    display: flex;
-    justify-content:space-around;
-    width: 80%;
 }
 
 .hidden {
@@ -264,39 +194,11 @@ input {
     visibility: visible;
 }
 
-.not-expanded {
-    display: none;
+.disabled {
+    pointer-events: none;
 }
 
-.expanded {
-    display: block;
-    padding: 1rem;
-}
-
-.actions {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    justify-self: flex-end;
-}
-
-.task-completed {
-    text-decoration: line-through;
-    color: rgba(0, 0, 0, 0.298); 
-}
-
-.error-message {
-    color: red;
-}
-
-.high-priority {
-    border-top: solid .3rem var(--high-priority);
-}
-
-.medium-priority {
-    border-top: solid .3rem var(--medium-priority);
-}
-
-.low-priority {
-    border-top: solid .3rem var(--low-pririty);
+.empty-message {
+    opacity: 60%;
+    font-style: italic;
 }
