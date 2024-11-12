@@ -306,7 +306,7 @@ function renderTaskEditModal(task) {
     </select>
     </label>
     <div class="modal-btns"><button id="delete-task-btn"><img src="${deleteIcon}" class="btn-icon"> Delete</button>
-    <button type="submit"><img src="${saveIcon}" class="btn-icon">Save</button></div>`
+    <button type="submit" id="submit-btn"><img src="${saveIcon}" class="btn-icon">Save</button></div>`
 
     const taskNewTitle = document.getElementById('task-new-title')
     const taskNewDate = document.getElementById('task-new-due-date')
@@ -373,7 +373,7 @@ function renderProjectEditModal(project) {
     </label>
 
     <div class="modal-btns"><button id="delete-project-btn"><img src="${deleteIcon}" class="btn-icon"> Delete</button>
-    <button type="submit"><img src="${saveIcon}" class="btn-icon">Save</button></div>`
+    <button type="submit" id="submit-btn"><img src="${saveIcon}" class="btn-icon">Save</button></div>`
 
     const newProjTitle = document.getElementById('project-new-title')
     const newProjDescr = document.getElementById('project-new-description')
