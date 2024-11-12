@@ -1,15 +1,20 @@
 import { getProjects, saveProjects } from "./storage"
-import { findAssignedProject, findProjectInStorage, findTaskInStorage, clear, formatDate, isDateInFuture, dateValidation, clearCompletedTasks, getTodayTasks, getWeekTasks, getOverdueTasks } from "./helper"
+import createTaskForm from "./task-form"
+import { findAssignedProject, findProjectInStorage, findTaskInStorage, clear, formatDate, dateValidation, clearCompletedTasks, getTodayTasks, getWeekTasks, getOverdueTasks, getThisMonthTasks, isDatePast } from "./helper"
 import editImg from "../src/icons/edit.svg"
 import expandImg from "../src/icons/expand.svg"
-import createProjectForm from "./project-form"
+import closeIcon from "../src/icons/close.svg"
+import saveIcon from "../src/icons/save.svg"
+import deleteIcon from "../src/icons/delete.svg"
 
 // render projects and tasks //
 
 export function renderNewProject(project) {
-    const projectBtn = document.createElement('button')
-    projectBtn.setAttribute('class', 'project-btn')
-    projectBtn.textContent = project.title
+
+    const projectBtn = document.createElement('div')
+    projectBtn.setAttribute('class', 'nav-btn project-btn')
+    projectBtn.innerHTML = '<span class="bullet-point">•</span>' + project.title
+
     document.getElementById('project-list').appendChild(projectBtn)
     projectBtn.addEventListener('click', (e) => {
         e.preventDefault();
@@ -26,7 +31,11 @@ export function renderProjects(projectsList) {
 
     if (projectsList.length == 0) {
         const content = document.getElementById('content')
-        content.textContent = "No projects. You're all caught up!"
+
+        const emptyMessage = document.createElement('div')
+        emptyMessage.setAttribute('class', 'empty-message')
+        emptyMessage.textContent = "No projects. You're all caught up!"
+        content.appendChild(emptyMessage)
     }
 
     clear(document.getElementById('project-list'))
@@ -37,9 +46,17 @@ export function renderProjects(projectsList) {
 }
 
 export function renderProjectPage(project) {
+
+    const header = document.querySelector('header')
     const title = document.getElementById('page-title')
     
     title.textContent = project.title
+
+    const newTask = document.getElementById('create-new-task')
+    newTask.classList.remove('hidden')
+    newTask.addEventListener('click', () => {
+        createTaskForm(project)
+    })
 
     const editIcon = document.createElement('img')
     editIcon.setAttribute('id', 'edit-task')
@@ -76,9 +93,11 @@ export function renderProjectPage(project) {
 
     if (tasksList.length == 0) {
         const noTasks = document.createElement('div')
-        noTasks.setAttribute('class', 'no-tasks-to-display')
-        noTasks.textContent = "No tasks. You're all caught up!"
-        content.appendChild(noTasks)
+
+        const emptyMessage = document.createElement('div')
+        emptyMessage.setAttribute('class', 'empty-message')
+        emptyMessage.textContent = "No tasks. You're all caught up!"
+        content.appendChild(emptyMessage)
         content.removeChild(clearTasks)
     }
 
@@ -103,28 +122,33 @@ export function renderTask(task) {
     const taskInfo = document.createElement('div')
     taskInfo.setAttribute('class', 'task-info')
 
+    const label = document.createElement('label')
+    label.setAttribute('class', 'checkbox-label')
+
+    const span = document.createElement('span')
+    span.setAttribute('class', 'custom-checkbox')
+
     const isCompletedCheck = document.createElement('input')
     isCompletedCheck.setAttribute('type', 'checkbox')
-    collapsed.appendChild(isCompletedCheck)
+
+    label.appendChild(isCompletedCheck)
+    label.appendChild(span)
+
+    collapsed.appendChild(label)
+
     isCompletedCheck.checked = task.isCompleted
     if (isCompletedCheck.checked) {
         taskDiv.classList.add('task-completed')
-    }    
+    }   
 
-    // mark as complete/not complete // 
+    const isOverdue = document.createElement('div')
+    isOverdue.setAttribute('class', 'overdue-label')
+    collapsed.appendChild(isOverdue)
+    isOverdue.classList.add('hidden')
 
-    isCompletedCheck.addEventListener('change', () => {
-        const projectList = getProjects()
-        const currentTask = findTaskInStorage(task, projectList)
-        if (isCompletedCheck.checked) {
-            taskDiv.classList.add('task-completed')
-            currentTask.updateTaskInfo("isCompleted", true)
-        } else {
-            taskDiv.classList.remove('task-completed')
-            currentTask.updateTaskInfo("isCompleted", false)
-        }
-        saveProjects(projectList)
-    })
+    if (isDatePast(task.dueDate)) {
+        isOverdue.classList.remove('hidden')
+    }
 
     collapsed.appendChild(taskInfo)
 
@@ -157,7 +181,9 @@ export function renderTask(task) {
         expanded.setAttribute('class', 'not-expanded')
         taskDiv.appendChild(expanded)
         const note = document.createElement('div')
-        name.setAttribute('class', 'task-note')
+
+        note.setAttribute('class', 'task-note')
+
         note.textContent = task.note
         expanded.appendChild(note)
 
@@ -188,19 +214,38 @@ export function renderTask(task) {
     editIcon.setAttribute('id', 'edit-task')
     editIcon.src = editImg
     icons.appendChild(editIcon)
-
+    
     editIcon.addEventListener('click', () => {
         renderTaskEditModal(task)
+    })
+
+    // mark as complete/not complete // 
+
+    isCompletedCheck.addEventListener('change', () => {
+        const projectList = getProjects()
+        const currentTask = findTaskInStorage(task, projectList)
+        if (isCompletedCheck.checked) {
+            taskDiv.classList.add('task-completed')
+            currentTask.updateTaskInfo("isCompleted", true)
+            editIcon.classList.add('disabled')
+            expandIcon.classList.add('disabled')
+        } else {
+            taskDiv.classList.remove('task-completed')
+            currentTask.updateTaskInfo("isCompleted", false)
+            editIcon.classList.remove('disabled')
+            expandIcon.classList.remove('disabled')
+        }
+        saveProjects(projectList)
     })
 }
 
 function renderFilteredTasks(tasks, message) {
     if (tasks.length == 0) {
         const content = document.getElementById('content')
-        const noTasks = document.createElement('div')
-        noTasks.setAttribute('class', 'no-tasks-to-display')
-        noTasks.textContent = message
-        content.appendChild(noTasks)
+        const emptyMessage = document.createElement('div')
+        emptyMessage.setAttribute('class', 'empty-message')
+        emptyMessage.textContent = message
+        content.appendChild(emptyMessage)
     } else {
         const taskWrap = document.createElement('div')
         taskWrap.setAttribute('id', 'tasks-wrapper')
@@ -222,7 +267,8 @@ function renderModal() {
     dialog.showModal()
 
     const closeDialog = document.createElement('div')
-    closeDialog.textContent = 'X'
+    closeDialog.innerHTML = `<img src="${closeIcon}">`
+    closeDialog.setAttribute('class', 'close-modal')
     dialog.appendChild(closeDialog)
     closeDialog.addEventListener('click', () => {
         dialog.close()
@@ -242,25 +288,25 @@ function renderTaskEditModal(task) {
     const dialog = document.querySelector('dialog')
     editForm.setAttribute('id', 'task-edit-form')
 
-    editForm.innerHTML = `<label for="task-new-title">Title:
-    <input type="text" id="task-new-title" value="${task.title}" required>
+    editForm.innerHTML = `<label for="task-new-title"><p>Title</p>
+    <input type="text" id="task-new-title" value="${task.title}" maxlength="20" required>
     </label>
-    <label for="task-new-due-date">Due date:
+    <label for="task-new-due-date"><p>Due Date</p>
     <input type="date" id="task-new-due-date" value="${task.dueDate}" required>
     </label>
     <div id="future-date-error" class="error-message hidden"></div>
-    <label for="task-new-note">Note:
+    <label for="task-new-note"><p>Note</p>
     <textarea name="task-note" id="task-new-note">${task.note}</textarea>
     </label>
-    <label for="task-new-priority">Priority:
+    <label for="task-new-priority"><p>Priority</p>
     <select name="priority" id="task-new-priority">
     <option value="Low">Low</option>
     <option value="Medium">Medium</option>
     <option value="High">High</option>
     </select>
     </label>
-    <button id="delete-task-btn">Delete task</button>
-    <button type="submit" id="submit-btn">Save</button>`
+    <div class="modal-btns"><button id="delete-task-btn"><img src="${deleteIcon}" class="btn-icon"> Delete</button>
+    <button type="submit"><img src="${saveIcon}" class="btn-icon">Save</button></div>`
 
     const taskNewTitle = document.getElementById('task-new-title')
     const taskNewDate = document.getElementById('task-new-due-date')
@@ -318,12 +364,16 @@ function renderProjectEditModal(project) {
     const dialog = document.querySelector('dialog')
     editForm.setAttribute('id', 'project-edit-form')
 
-    editForm.innerHTML = `<label for="project-new-title">Title:
-    <input type="text" id="project-new-title" value="${project.title}" required>
-    <label for="project-new-description">Description:
-    <input type="text" id="project-new-description" value="${project.description}" required>
-    <button id="delete-project-btn">Delete project</button>
-    <button type="submit">Save</button>`
+    editForm.innerHTML = `<label for="project-new-title"><p>Title</p>
+    <input type="text" id="project-new-title" value="${project.title}" maxlength="20" required>
+    </label>
+
+    <label for="project-new-description"><p>Description</p>
+    <input type="text" id="project-new-description" value="${project.description}">
+    </label>
+
+    <div class="modal-btns"><button id="delete-project-btn"><img src="${deleteIcon}" class="btn-icon"> Delete</button>
+    <button type="submit"><img src="${saveIcon}" class="btn-icon">Save</button></div>`
 
     const newProjTitle = document.getElementById('project-new-title')
     const newProjDescr = document.getElementById('project-new-description')
@@ -364,8 +414,6 @@ function renderProjectEditModal(project) {
     }) 
 }
 
-// task filtering //
-
 export function renderToday() {
     const content = document.getElementById('content')
     clear(content)
@@ -384,6 +432,27 @@ export function renderWeek() {
 
     const weekTasks = getWeekTasks(getProjects())
     renderFilteredTasks(weekTasks, 'No tasks are due this week.')
+}
+
+
+export function renderNextWeek() {
+    const content = document.getElementById('content')
+    clear(content)
+    const title = document.getElementById('page-title')
+    title.textContent = "Next Week's tasks"
+
+    const weekTasks = getNextWeekTasks(getProjects())
+    renderFilteredTasks(nextWeekTasks, 'No tasks are due this week.')
+}
+
+export function renderThisMonth() {
+    const content = document.getElementById('content')
+    clear(content)
+    const title = document.getElementById('page-title')
+    title.textContent = "This month's tasks"
+
+    const monthTasks = getThisMonthTasks(getProjects())
+    renderFilteredTasks(monthTasks, 'No tasks are due this week.')
 }
 
 export function renderOverdue() {

@@ -1,58 +1,69 @@
-import createTaskForm from "./task-form"
+
 import createProjectForm from "./project-form"
 import { getProjects } from "./storage"
-import { renderProjects, renderToday, renderWeek, renderOverdue } from "./render"
+import { renderProjects, renderToday, renderWeek, renderOverdue, renderThisMonth } from "./render"
+import spring from "./icons/spring.png"
+import calendarIcon from "./icons/calendar.svg"
+import overdueIcon from "./icons/overdue.svg"
+import listIcon from "./icons/list.svg"
+import plusIcon from "./icons/plus.svg"
 
 const createHome = () => {
     const body = document.querySelector('body')
-
-    const container = document.createElement('div')
-    container.setAttribute('class', 'page-container')
-    body.appendChild(container)
+    const smallScreen = window.matchMedia("(max-width: 900px)")
 
     // sidebar //
 
     const sidebar = document.createElement('nav')
-    container.appendChild(sidebar)
+    body.appendChild(sidebar)
 
-    const appName = document.createElement('h1')
-    appName.textContent = 'To-do List'
-    sidebar.appendChild(appName)
+    const appTitle = document.createElement('div')
+    appTitle.setAttribute('class', 'app-title')
+    const appIcon = document.createElement('img')
+    appIcon.src = spring
+    sidebar.appendChild(appTitle)
+    appTitle.appendChild(appIcon)
+
+    const browseHeader = document.createElement('div')
+    browseHeader.setAttribute('class', 'nav-header')
+    browseHeader.textContent = 'Browse'
+    sidebar.appendChild(browseHeader)
 
     const btnWrapper = document.createElement('div')
     btnWrapper.setAttribute('class', 'nav-btns')
     sidebar.appendChild(btnWrapper)
 
     // btns //
+    
 
-    const today = document.createElement('button')
+    const today = document.createElement('div')
+    today.innerHTML = `<img src="${listIcon}" class="nav-icon"> <span>Today</span>`
     today.setAttribute('class', 'nav-btn')
-    today.textContent = "Today"
-    btnWrapper.appendChild(today)
 
-    const week = document.createElement('button')
+    const week = document.createElement('div')
+    week.innerHTML = `<img src="${calendarIcon}" class="nav-icon"> <span>This week</span>`
     week.setAttribute('class', 'nav-btn')
-    week.textContent = "This Week"
     btnWrapper.appendChild(week)
 
-    const overdue = document.createElement('button')
+    const month = document.createElement('div')
+    month.innerHTML = `<img src="${calendarIcon}" class="nav-icon"> <span>This month</span>`
+    month.setAttribute('class', 'nav-btn')
+    btnWrapper.appendChild(month)
+
+    const overdue = document.createElement('div')
+    overdue.innerHTML = `<img src="${overdueIcon}" class="nav-icon"> <span>Overdue</span>`
     overdue.setAttribute('class', 'nav-btn')
-    overdue.textContent = "Overdue"
     btnWrapper.appendChild(overdue)
-
-
 
     // projects section //
     
-    const projectsHeader = document.createElement('h2')
-    projectsHeader.textContent = "My Projects"
+    const projectsHeader = document.createElement('div')
+    projectsHeader.setAttribute('class', 'nav-header')
+    projectsHeader.innerHTML = `My Projects <img src="${plusIcon}" id="new-project-btn">`
     sidebar.appendChild(projectsHeader)
 
-    const newProj = document.createElement('button')
-    newProj.setAttribute('id', 'new-project-btn')
-    newProj.textContent = "+ Project"
-    sidebar.appendChild(newProj)
-
+    const newProj = document.getElementById('new-project-btn')
+    
     const projList = document.createElement('div')
     projList.setAttribute('id', 'project-list')
     sidebar.appendChild(projList)    
@@ -60,7 +71,7 @@ const createHome = () => {
     //main content//
 
     const main = document.createElement('main')
-    container.appendChild(main)
+    body.appendChild(main)
     const header = document.createElement('header')
 
     const content = document.createElement('div')
@@ -69,9 +80,10 @@ const createHome = () => {
     const pageTitle = document.createElement('h1')
     pageTitle.setAttribute('id', 'page-title')
 
-    const newTask = document.createElement('button')
-    newTask.textContent = '+ New Task'
-    newTask.setAttribute('id', 'new-task-btn')
+    const newTask = document.createElement('div')
+    newTask.setAttribute('id', 'create-new-task')
+    newTask.innerHTML = `<img src="${plusIcon}"> New task`
+    newTask.classList.add('hidden')
 
     main.appendChild(header)
     main.appendChild(content)
@@ -80,11 +92,9 @@ const createHome = () => {
 
     renderProjects(getProjects())
 
-    // nav handle click // 
+    renderToday()
 
-    newTask.addEventListener('click', () => {
-        createTaskForm()
-    })
+    // nav handle click // 
 
     newProj.addEventListener('click', () => {
         createProjectForm()
@@ -92,10 +102,15 @@ const createHome = () => {
 
     today.addEventListener('click', () => {
         renderToday()
+
     })
 
     week.addEventListener('click', () => {
         renderWeek()
+    })
+
+    month.addEventListener('click', () => {
+        renderThisMonth()
     })
 
     overdue.addEventListener('click', () => {

@@ -10,12 +10,15 @@ const createProjectForm = () => {
 
     pageTitle.textContent = "Create a new project"
     content.innerHTML = `<form id="project-form"> 
-    <label for="project-title">Title:
-        <input type="text" id="project-title" required>
+
+    <label for="project-title"><p>Title</p>
+    <input type="text" id="project-title" maxlength="20" required>
     </label>
+
     <div id="title-error" class="error-message hidden"></div>
 
-    <label for="project-title">Description:
+    <label for="project-title"><p>Description</p>
+
         <input type="text" id="project-description">
     </label>
 
