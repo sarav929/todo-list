@@ -10,8 +10,8 @@
 
 :root {
     --shadow: rgba(29, 25, 25, 0.16) 0px 1px 4px;
-    --light-white: #f7f7f7;
-    --light-grey: #eeeeee;
+    --light-white: #FBFBFB;
+    --light-grey: #F5EDED;
     --text-color: #313d40;
 
     --low-pririty: #b28ae4;
@@ -33,7 +33,7 @@ body {
     font-family: 'Roboto', sans-serif;  
     font-weight: 300;
     font-size: 1.5rem;
-    background-color: white;
+    background-color: var(--light-white);
     color: var(--text-color);
 }
 
@@ -75,7 +75,7 @@ nav {
 }
 
 .nav-btn:hover {
-    background-color: white;
+    background-color: var(--light-white);
     transition: ease-in-out 400ms;
     cursor: pointer;
 }
@@ -124,7 +124,7 @@ h1, h2 {
 main {
     width: 80%;
     padding: 2rem;
-    background-color: white;
+    background-color: var(--light-white);
 }
 
 button {
@@ -142,6 +142,7 @@ button {
 button:hover {
     transition: ease-in-out 400ms;
     background-color: white;
+    cursor: pointer;
 }
 
 header {

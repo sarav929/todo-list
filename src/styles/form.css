@@ -82,6 +82,7 @@ dialog input textarea select {
 .close-modal {
     text-align: right;
     padding: 0rem 1rem;
+    cursor: pointer;
     & img {
         width: 2rem;
     }

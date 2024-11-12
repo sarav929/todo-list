@@ -26,6 +26,7 @@
     box-shadow: var(--shadow);
     cursor: pointer;
     position: relative;
+    background-color: white;
 
     & #expand-task {
         width: 1.5rem;

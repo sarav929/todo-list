@@ -407,8 +407,6 @@ function renderProjectEditModal(project) {
     }) 
 }
 
-// task filtering //
-
 export function renderToday() {
     const content = document.getElementById('content')
     clear(content)

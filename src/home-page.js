@@ -9,6 +9,7 @@ import plusIcon from "./icons/plus.svg"
 
 const createHome = () => {
     const body = document.querySelector('body')
+    const smallScreen = window.matchMedia("(max-width: 900px)")
 
     // sidebar //
 
@@ -32,11 +33,12 @@ const createHome = () => {
     sidebar.appendChild(btnWrapper)
 
     // btns //
+    
 
     const today = document.createElement('div')
     today.innerHTML = `<img src="${listIcon}" class="nav-icon"> <span>Today</span>`
     today.setAttribute('class', 'nav-btn')
-    btnWrapper.appendChild(today)
+    
 
     const week = document.createElement('div')
     week.innerHTML = `<img src="${calendarIcon}" class="nav-icon"> <span>This week</span>`
@@ -89,6 +91,8 @@ const createHome = () => {
     main.appendChild(content)
     header.appendChild(pageTitle)
     header.appendChild(newTask)
+
+
     
 
     renderProjects(getProjects())
