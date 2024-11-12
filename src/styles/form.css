@@ -1,15 +1,3 @@
-:root {
-    --shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-    --light-white: #f7f7f7;
-    --light-grey: #eeeeee;
-    --text-color: #313d40;
-
-    --low-pririty: #b28ae4;
-    --medium-priority: #ffce71;
-    --high-priority: #ea5b70;
-    --input-border: solid 1px rgba(0, 0, 0, 0.30);
-}
-
 form {
     display: flex;
     flex-direction: column;
@@ -25,7 +13,7 @@ input, select, textarea {
     border-radius: 10px;
     font-size: 1rem;
     padding: .5rem 1.5rem;
-    accent-color: var(--low-pririty);
+    accent-color: var(--low-priority);
 }
 
 textarea {
