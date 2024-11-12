@@ -2,6 +2,7 @@ import Project from "./project"
 import Task from "./task"
 
 import { convertToDateObj } from "./helper"
+import { subDays } from "date-fns"
 
 // initialize //
 
@@ -10,9 +11,14 @@ export function initializeProjects() {
      
     if (projects === null) {
 
-        const defaultProject = new Project("Default Project", "Welcome! Add a new task:")
-        defaultProject.addTask(new Task('do this', convertToDateObj('2024-11-11', 'yyyy-MM-dd'), defaultProject.title, "", "High"))
-        defaultProject.addTask(new Task('do that', convertToDateObj('2024-11-11', 'yyyy-MM-dd'), defaultProject.title, "Note", "Low"))
+        const today = new Date()
+        const yesterday = subDays(new Date(), 1)
+
+        const defaultProject = new Project("Default Project", "Welcome! This is a sample project :)")
+        defaultProject.addTask(new Task('Unimportant task', today.toLocaleDateString('en-CA'), defaultProject.title, "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", "Low"))
+        defaultProject.addTask(new Task('More important task', today.toLocaleDateString('en-CA'), defaultProject.title, "", "Medium"))
+        defaultProject.addTask(new Task('Very important task', today.toLocaleDateString('en-CA'), defaultProject.title, "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", "High"))
+        defaultProject.addTask(new Task('Overdue task', yesterday.toLocaleDateString('en-CA'), defaultProject.title, "", "High"))
 
         projects = [defaultProject]
         localStorage.setItem('projects', JSON.stringify(projects))

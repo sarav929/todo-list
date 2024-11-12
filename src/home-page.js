@@ -10,14 +10,10 @@ import plusIcon from "./icons/plus.svg"
 const createHome = () => {
     const body = document.querySelector('body')
 
-    const container = document.createElement('div')
-    container.setAttribute('class', 'page-container')
-    body.appendChild(container)
-
     // sidebar //
 
     const sidebar = document.createElement('nav')
-    container.appendChild(sidebar)
+    body.appendChild(sidebar)
 
     const appTitle = document.createElement('div')
     appTitle.setAttribute('class', 'app-title')
@@ -75,7 +71,7 @@ const createHome = () => {
     //main content//
 
     const main = document.createElement('main')
-    container.appendChild(main)
+    body.appendChild(main)
     const header = document.createElement('header')
 
     const content = document.createElement('div')
@@ -96,6 +92,8 @@ const createHome = () => {
     
 
     renderProjects(getProjects())
+
+    renderToday()
 
     // nav handle click // 
 

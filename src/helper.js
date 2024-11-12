@@ -1,4 +1,4 @@
-import { parse, isFuture, format, isThisWeek, isToday, isBefore, startOfDay, addMonths } from "date-fns"
+import { parse, isFuture, format, isThisWeek, isToday, isBefore, isAfter, startOfDay, addMonths, startOfMonth, endOfMonth } from "date-fns"
 import { getProjects, saveProjects } from "./storage"
 
 
@@ -34,11 +34,11 @@ export function isDateThisWeek(date) {
     return isThisWeek(parsedDate)
 }
 
-export function isDateNextMonth(date) {
+export function isDateThisMonth(date) {
     const parsedDate = parse(date, 'yyyy-MM-dd', new Date());
-    const startOfNextMonth = startOfMonth(addMonths(new Date(), 1));
-    const endOfNextMonth = endOfMonth(addMonths(new Date(), 1));
-    return isAfter(parsedDate, startOfNextMonth) && isBefore(parsedDate, endOfNextMonth);
+    const startOfCurrentMonth = startOfMonth(new Date());
+    const endOfCurrentMonth = endOfMonth(new Date());
+    return isAfter(parsedDate, startOfCurrentMonth) && isBefore(parsedDate, endOfCurrentMonth);
 }
 
 export function dateValidation(input, message, submit) {

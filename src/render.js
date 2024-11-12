@@ -1,6 +1,6 @@
 import { getProjects, saveProjects } from "./storage"
 import createTaskForm from "./task-form"
-import { findAssignedProject, findProjectInStorage, findTaskInStorage, clear, formatDate, dateValidation, clearCompletedTasks, getTodayTasks, getWeekTasks, getOverdueTasks, getThisMonthTasks } from "./helper"
+import { findAssignedProject, findProjectInStorage, findTaskInStorage, clear, formatDate, dateValidation, clearCompletedTasks, getTodayTasks, getWeekTasks, getOverdueTasks, getThisMonthTasks, isDatePast } from "./helper"
 import editImg from "../src/icons/edit.svg"
 import expandImg from "../src/icons/expand.svg"
 import closeIcon from "../src/icons/close.svg"
@@ -136,6 +136,15 @@ export function renderTask(task) {
         taskDiv.classList.add('task-completed')
     }   
 
+    const isOverdue = document.createElement('div')
+    isOverdue.setAttribute('class', 'overdue-label')
+    collapsed.appendChild(isOverdue)
+    isOverdue.classList.add('hidden')
+
+    if (isDatePast(task.dueDate)) {
+        isOverdue.classList.remove('hidden')
+    }
+
     collapsed.appendChild(taskInfo)
 
     const name = document.createElement('div')
@@ -167,7 +176,7 @@ export function renderTask(task) {
         expanded.setAttribute('class', 'not-expanded')
         taskDiv.appendChild(expanded)
         const note = document.createElement('div')
-        name.setAttribute('class', 'task-note')
+        note.setAttribute('class', 'task-note')
         note.textContent = task.note
         expanded.appendChild(note)
 
