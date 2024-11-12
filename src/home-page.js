@@ -1,3 +1,4 @@
+
 import createProjectForm from "./project-form"
 import { getProjects } from "./storage"
 import { renderProjects, renderToday, renderWeek, renderOverdue, renderThisMonth } from "./render"
@@ -38,7 +39,6 @@ const createHome = () => {
     const today = document.createElement('div')
     today.innerHTML = `<img src="${listIcon}" class="nav-icon"> <span>Today</span>`
     today.setAttribute('class', 'nav-btn')
-    
 
     const week = document.createElement('div')
     week.innerHTML = `<img src="${calendarIcon}" class="nav-icon"> <span>This week</span>`
@@ -55,8 +55,6 @@ const createHome = () => {
     overdue.setAttribute('class', 'nav-btn')
     btnWrapper.appendChild(overdue)
 
-
-
     // projects section //
     
     const projectsHeader = document.createElement('div')
@@ -65,7 +63,7 @@ const createHome = () => {
     sidebar.appendChild(projectsHeader)
 
     const newProj = document.getElementById('new-project-btn')
-
+    
     const projList = document.createElement('div')
     projList.setAttribute('id', 'project-list')
     sidebar.appendChild(projList)    
@@ -92,9 +90,6 @@ const createHome = () => {
     header.appendChild(pageTitle)
     header.appendChild(newTask)
 
-
-    
-
     renderProjects(getProjects())
 
     renderToday()
@@ -107,6 +102,7 @@ const createHome = () => {
 
     today.addEventListener('click', () => {
         renderToday()
+
     })
 
     week.addEventListener('click', () => {

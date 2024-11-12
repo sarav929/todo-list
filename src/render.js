@@ -10,9 +10,11 @@ import deleteIcon from "../src/icons/delete.svg"
 // render projects and tasks //
 
 export function renderNewProject(project) {
+
     const projectBtn = document.createElement('div')
     projectBtn.setAttribute('class', 'nav-btn project-btn')
     projectBtn.innerHTML = '<span class="bullet-point">•</span>' + project.title
+
     document.getElementById('project-list').appendChild(projectBtn)
     projectBtn.addEventListener('click', (e) => {
         e.preventDefault();
@@ -29,6 +31,7 @@ export function renderProjects(projectsList) {
 
     if (projectsList.length == 0) {
         const content = document.getElementById('content')
+
         const emptyMessage = document.createElement('div')
         emptyMessage.setAttribute('class', 'empty-message')
         emptyMessage.textContent = "No projects. You're all caught up!"
@@ -43,6 +46,7 @@ export function renderProjects(projectsList) {
 }
 
 export function renderProjectPage(project) {
+
     const header = document.querySelector('header')
     const title = document.getElementById('page-title')
     
@@ -89,6 +93,7 @@ export function renderProjectPage(project) {
 
     if (tasksList.length == 0) {
         const noTasks = document.createElement('div')
+
         const emptyMessage = document.createElement('div')
         emptyMessage.setAttribute('class', 'empty-message')
         emptyMessage.textContent = "No tasks. You're all caught up!"
@@ -176,7 +181,9 @@ export function renderTask(task) {
         expanded.setAttribute('class', 'not-expanded')
         taskDiv.appendChild(expanded)
         const note = document.createElement('div')
+
         note.setAttribute('class', 'task-note')
+
         note.textContent = task.note
         expanded.appendChild(note)
 
@@ -426,6 +433,7 @@ export function renderWeek() {
     const weekTasks = getWeekTasks(getProjects())
     renderFilteredTasks(weekTasks, 'No tasks are due this week.')
 }
+
 
 export function renderNextWeek() {
     const content = document.getElementById('content')

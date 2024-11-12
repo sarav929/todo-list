@@ -54,6 +54,7 @@ const createTaskForm = (project) => {
     form.addEventListener('submit', (e) => {
         e.preventDefault()
 
+
         const projectsList = getProjects()
 
         let newTask = new Task(taskTitle.value, convertToDateObj(taskDueDate.value), project.title, taskNote.value, taskPriority.value, false)

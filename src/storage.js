@@ -1,8 +1,8 @@
 import Project from "./project"
 import Task from "./task"
-
 import { convertToDateObj } from "./helper"
 import { subDays } from "date-fns"
+
 
 // initialize //
 
@@ -10,6 +10,7 @@ export function initializeProjects() {
     let projects = localStorage.getItem('projects')
      
     if (projects === null) {
+
 
         const today = new Date()
         const yesterday = subDays(new Date(), 1)
