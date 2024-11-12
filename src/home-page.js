@@ -1,119 +1,121 @@
-import Project from "./project"
-import Task from "./task"
 
+import createProjectForm from "./project-form"
+import { getProjects } from "./storage"
+import { renderProjects, renderToday, renderWeek, renderOverdue, renderThisMonth } from "./render"
+import spring from "./icons/spring.png"
+import calendarIcon from "./icons/calendar.svg"
+import overdueIcon from "./icons/overdue.svg"
+import listIcon from "./icons/list.svg"
+import plusIcon from "./icons/plus.svg"
 
 const createHome = () => {
     const body = document.querySelector('body')
-
-    const container = document.createElement('div')
-    container.setAttribute('class', 'page-container')
-    body.appendChild(container)
+    const smallScreen = window.matchMedia("(max-width: 900px)")
 
     // sidebar //
 
     const sidebar = document.createElement('nav')
-    container.appendChild(sidebar)
+    body.appendChild(sidebar)
 
-    const appName = document.createElement('h1')
-    appName.textContent = 'To-do List'
-    sidebar.appendChild(appName)
+    const appTitle = document.createElement('div')
+    appTitle.setAttribute('class', 'app-title')
+    const appIcon = document.createElement('img')
+    appIcon.src = spring
+    sidebar.appendChild(appTitle)
+    appTitle.appendChild(appIcon)
+
+    const browseHeader = document.createElement('div')
+    browseHeader.setAttribute('class', 'nav-header')
+    browseHeader.textContent = 'Browse'
+    sidebar.appendChild(browseHeader)
 
     const btnWrapper = document.createElement('div')
     btnWrapper.setAttribute('class', 'nav-btns')
     sidebar.appendChild(btnWrapper)
 
     // btns //
+    
 
-    const today = document.createElement('button')
+    const today = document.createElement('div')
+    today.innerHTML = `<img src="${listIcon}" class="nav-icon"> <span>Today</span>`
     today.setAttribute('class', 'nav-btn')
-    today.textContent = "Today's Tasks"
-    btnWrapper.appendChild(today)
 
-    const unsorted = document.createElement('button')
-    unsorted.setAttribute('class', 'nav-btn')
-    unsorted.textContent = "Unsorted Tasks"
-    btnWrapper.appendChild(unsorted)
+    const week = document.createElement('div')
+    week.innerHTML = `<img src="${calendarIcon}" class="nav-icon"> <span>This week</span>`
+    week.setAttribute('class', 'nav-btn')
+    btnWrapper.appendChild(week)
+
+    const month = document.createElement('div')
+    month.innerHTML = `<img src="${calendarIcon}" class="nav-icon"> <span>This month</span>`
+    month.setAttribute('class', 'nav-btn')
+    btnWrapper.appendChild(month)
+
+    const overdue = document.createElement('div')
+    overdue.innerHTML = `<img src="${overdueIcon}" class="nav-icon"> <span>Overdue</span>`
+    overdue.setAttribute('class', 'nav-btn')
+    btnWrapper.appendChild(overdue)
 
     // projects section //
+    
+    const projectsHeader = document.createElement('div')
+    projectsHeader.setAttribute('class', 'nav-header')
+    projectsHeader.innerHTML = `My Projects <img src="${plusIcon}" id="new-project-btn">`
+    sidebar.appendChild(projectsHeader)
 
-    const projects = document.createElement('h2')
-    projects.textContent = "My Projects"
-    sidebar.appendChild(projects)
-
-    const newProj = document.createElement('button')
-    newProj.setAttribute('id', 'new-project-btn')
-    newProj.textContent = "+ Project"
-    sidebar.appendChild(newProj)
-
+    const newProj = document.getElementById('new-project-btn')
+    
     const projList = document.createElement('div')
-    projList.setAttribute('class', 'project-list')
-    sidebar.appendChild(projList)
-
-    ///// test projects ///// 
-
-    const test1 = document.createElement('button')
-    test1.textContent = "Project one"
-    test1.setAttribute('class', 'project-btn')
-    projList.appendChild(test1)
-
-    const test2 = document.createElement('button')
-    test2.textContent = "Project two"
-    test2.setAttribute('class', 'project-btn')
-    projList.appendChild(test2)
-
-    ////////
+    projList.setAttribute('id', 'project-list')
+    sidebar.appendChild(projList)    
 
     //main content//
 
     const main = document.createElement('main')
-    container.appendChild(main)
+    body.appendChild(main)
     const header = document.createElement('header')
 
     const content = document.createElement('div')
     content.setAttribute('id', 'content')
 
-    //content.textContent = "Here's the content"
-
     const pageTitle = document.createElement('h1')
-    //pageTitle.textContent = 'Page Title'
-    const newTask = document.createElement('button')
-    newTask.textContent = '+ New Task'
-    newTask.setAttribute('id', 'new-task-btn')
+    pageTitle.setAttribute('id', 'page-title')
+
+    const newTask = document.createElement('div')
+    newTask.setAttribute('id', 'create-new-task')
+    newTask.innerHTML = `<img src="${plusIcon}"> New task`
+    newTask.classList.add('hidden')
 
     main.appendChild(header)
     main.appendChild(content)
     header.appendChild(pageTitle)
     header.appendChild(newTask)
 
+    renderProjects(getProjects())
+
+    renderToday()
+
     // nav handle click // 
 
-    newTask.addEventListener('click', () => {
-        pageTitle.textContent = "Create a new task"
-        content.textContent = "Here's the form to create a new task"
-    })
-
     newProj.addEventListener('click', () => {
-        pageTitle.textContent = "Create a new project"
-        content.textContent = "Here's the form to create a new project"
+        createProjectForm()
     })
 
     today.addEventListener('click', () => {
-        pageTitle.textContent = "Today's Tasks"
-        content.textContent = "Here's today's tasks"
+        renderToday()
+
     })
 
-    unsorted.addEventListener('click', () => {
-        pageTitle.textContent = "Unsorted Tasks"
-        content.textContent = "Here's your unsorted tasks"
+    week.addEventListener('click', () => {
+        renderWeek()
     })
 
-    const myProjects = document.getElementsByClassName('project-btn')
-    for (let btn of myProjects) {
-        btn.addEventListener('click', () => {
-            pageTitle.textContent = btn.textContent
-            content.textContent = `Here will be ${btn.textContent}'s tasks`
-        })
-    }
+    month.addEventListener('click', () => {
+        renderThisMonth()
+    })
+
+    overdue.addEventListener('click', () => {
+        renderOverdue()
+    })
 
 }
 

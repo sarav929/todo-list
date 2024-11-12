@@ -1,0 +1,114 @@
+:root {
+    --shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    --light-white: #f7f7f7;
+    --light-grey: #eeeeee;
+    --text-color: #313d40;
+
+    --low-pririty: #b28ae4;
+    --medium-priority: #ffce71;
+    --high-priority: #ea5b70;
+    --input-border: solid 1px rgba(0, 0, 0, 0.30);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+input, select, textarea {
+    width: 40vw;
+    box-shadow: var(--shadow);
+    border: var(--input-border);
+    border-radius: 10px;
+    font-size: 1rem;
+    padding: .5rem 1.5rem;
+    accent-color: var(--low-pririty);
+}
+
+textarea {
+    height: 15vh;
+    resize: none;
+    padding: 1.5rem 1rem;
+}
+
+
+label {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    text-transform: uppercase;
+    align-self: flex-start;
+    padding: 0rem 1.5rem;
+    font-size: .8rem;
+    letter-spacing: .3rem;
+    font-weight: bold;
+
+    & p {
+        opacity: 70%;
+        padding: 0rem .5rem;
+        margin: 0;
+    }
+}
+
+input[type=date] {
+    padding: .5rem 1.5rem;
+    font-size: 1rem;
+}
+
+select {
+    padding: 1rem;   
+    font-size: 1rem;
+    background-color: white;
+    border-radius: 0px;
+}
+
+dialog input textarea select {
+    width: 70vw;
+    font-size: 1rem;
+    padding: 1.5rem;
+}
+
+.modal-btns {
+    display: flex;
+
+    & button {
+        width: 10rem;
+    }
+}
+
+.close-modal {
+    text-align: right;
+    padding: 0rem 1rem;
+    cursor: pointer;
+    & img {
+        width: 2rem;
+    }
+}
+
+.close-modal:hover {
+    transition: ease-in-out 400ms;
+    opacity: 60%;
+}
+
+dialog {
+    border: none;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    color: var(--text-color);
+}
+
+dialog button {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: center;
+    color: var(--text-color);
+}
+
+.btn-icon {
+    width: 1.2rem;
+    opacity: 80%;
+}

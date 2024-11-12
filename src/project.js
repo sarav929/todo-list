@@ -1,11 +1,8 @@
 class Project {
-    constructor(title, dueDate, description, note = "", tasks = [], isCompleted = false) {
+    constructor(title, description, tasks = []) {
         this.title = title
-        this.dueDate = dueDate
         this.description = description
-        this.note = note
         this.tasks = tasks
-        this.isCompleted = isCompleted
     }
 
     addTask(task) {
@@ -13,7 +10,7 @@ class Project {
     }
 
     removeTask(task) { 
-        this.tasks = this.tasks.filter(item => item !== task); 
+        this.tasks = this.tasks.filter(item => item !== task)
     }
 
     updateProjInfo(attribute, value) {
