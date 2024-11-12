@@ -1,4 +1,4 @@
-import { parse, isFuture, format, isThisWeek, isToday, isBefore, startOfDay } from "date-fns"
+import { parse, isFuture, format, isThisWeek, isToday, isBefore, startOfDay, addMonths } from "date-fns"
 import { getProjects, saveProjects } from "./storage"
 
 
@@ -32,6 +32,13 @@ export function isDatePast(date) {
 export function isDateThisWeek(date) {
     const parsedDate = parse(date, 'yyyy-MM-dd', new Date())
     return isThisWeek(parsedDate)
+}
+
+export function isDateNextMonth(date) {
+    const parsedDate = parse(date, 'yyyy-MM-dd', new Date());
+    const startOfNextMonth = startOfMonth(addMonths(new Date(), 1));
+    const endOfNextMonth = endOfMonth(addMonths(new Date(), 1));
+    return isAfter(parsedDate, startOfNextMonth) && isBefore(parsedDate, endOfNextMonth);
 }
 
 export function dateValidation(input, message, submit) {
@@ -120,6 +127,18 @@ export function getWeekTasks(projects) {
         })
     })
     return weekTasks
+}
+
+export function getThisMonthTasks(projects) {
+    const thisMonthTasks = []
+    projects.forEach((project) => {
+        project.tasks.forEach((task) => {
+            if (isDateThisMonth(task.dueDate)) {
+                thisMonthTasks.push(task)
+            }
+        })
+    })
+    return thisMonthTasks
 }
 
 export function getOverdueTasks(projects) {

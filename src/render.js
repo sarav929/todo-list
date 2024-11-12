@@ -1,6 +1,6 @@
 import { getProjects, saveProjects } from "./storage"
 import createTaskForm from "./task-form"
-import { findAssignedProject, findProjectInStorage, findTaskInStorage, clear, formatDate, isDateInFuture, dateValidation, clearCompletedTasks, getTodayTasks, getWeekTasks, getOverdueTasks } from "./helper"
+import { findAssignedProject, findProjectInStorage, findTaskInStorage, clear, formatDate, dateValidation, clearCompletedTasks, getTodayTasks, getWeekTasks, getOverdueTasks, getThisMonthTasks } from "./helper"
 import editImg from "../src/icons/edit.svg"
 import expandImg from "../src/icons/expand.svg"
 import closeIcon from "../src/icons/close.svg"
@@ -418,6 +418,26 @@ export function renderWeek() {
 
     const weekTasks = getWeekTasks(getProjects())
     renderFilteredTasks(weekTasks, 'No tasks are due this week.')
+}
+
+export function renderNextWeek() {
+    const content = document.getElementById('content')
+    clear(content)
+    const title = document.getElementById('page-title')
+    title.textContent = "Next Week's tasks"
+
+    const weekTasks = getNextWeekTasks(getProjects())
+    renderFilteredTasks(nextWeekTasks, 'No tasks are due this week.')
+}
+
+export function renderThisMonth() {
+    const content = document.getElementById('content')
+    clear(content)
+    const title = document.getElementById('page-title')
+    title.textContent = "This month's tasks"
+
+    const monthTasks = getThisMonthTasks(getProjects())
+    renderFilteredTasks(monthTasks, 'No tasks are due this week.')
 }
 
 export function renderOverdue() {

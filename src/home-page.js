@@ -1,7 +1,6 @@
-import createTaskForm from "./task-form"
 import createProjectForm from "./project-form"
 import { getProjects } from "./storage"
-import { renderProjects, renderToday, renderWeek, renderOverdue } from "./render"
+import { renderProjects, renderToday, renderWeek, renderOverdue, renderThisMonth } from "./render"
 import spring from "./icons/spring.png"
 import calendarIcon from "./icons/calendar.svg"
 import overdueIcon from "./icons/overdue.svg"
@@ -22,15 +21,15 @@ const createHome = () => {
 
     const appTitle = document.createElement('div')
     appTitle.setAttribute('class', 'app-title')
-    const appName = document.createElement('h1')
-    appName.setAttribute('class', 'accent-title')
     const appIcon = document.createElement('img')
     appIcon.src = spring
-    appName.innerHTML = ''
     sidebar.appendChild(appTitle)
     appTitle.appendChild(appIcon)
-    appTitle.appendChild(appName)
 
+    const browseHeader = document.createElement('div')
+    browseHeader.setAttribute('class', 'nav-header')
+    browseHeader.textContent = 'Browse'
+    sidebar.appendChild(browseHeader)
 
     const btnWrapper = document.createElement('div')
     btnWrapper.setAttribute('class', 'nav-btns')
@@ -48,6 +47,11 @@ const createHome = () => {
     week.setAttribute('class', 'nav-btn')
     btnWrapper.appendChild(week)
 
+    const month = document.createElement('div')
+    month.innerHTML = `<img src="${calendarIcon}" class="nav-icon"> <span>This month</span>`
+    month.setAttribute('class', 'nav-btn')
+    btnWrapper.appendChild(month)
+
     const overdue = document.createElement('div')
     overdue.innerHTML = `<img src="${overdueIcon}" class="nav-icon"> <span>Overdue</span>`
     overdue.setAttribute('class', 'nav-btn')
@@ -58,7 +62,7 @@ const createHome = () => {
     // projects section //
     
     const projectsHeader = document.createElement('div')
-    projectsHeader.setAttribute('class', 'projects-header')
+    projectsHeader.setAttribute('class', 'nav-header')
     projectsHeader.innerHTML = `My Projects <img src="${plusIcon}" id="new-project-btn">`
     sidebar.appendChild(projectsHeader)
 
@@ -105,6 +109,10 @@ const createHome = () => {
 
     week.addEventListener('click', () => {
         renderWeek()
+    })
+
+    month.addEventListener('click', () => {
+        renderThisMonth()
     })
 
     overdue.addEventListener('click', () => {
