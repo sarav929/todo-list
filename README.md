@@ -2,6 +2,8 @@
 
 [Live preview](https://sarav929.github.io/todo-list/)
 
-A todo list website where user can create projects with a list of tasks to complete by a certain date as part of the Odin Project. I built the page using webpack and I kept DOM manipulation and app logis as separate as possible in my JS files. I chose to handle projects and tasks by creating a class for each of them. The assingment also required that the projects and tasks were saved to local storage so that the user could access them in different sessions, using JSON to save and retrieve the information. I used date-fns for data handling in the application. 
+This is a Todo List website where users can create projects with a list of tasks to complete by a certain date, built as part of the Odin Project. The page was developed using Webpack, with a focus on keeping DOM manipulation and app logic as separate as possible in different JavaScript files.
 
-Note: This version has been tested on desktop only and I plan to add styling for smaller screens in the future.
+To handle projects and tasks, I created a class for each. The assignment also required that projects and tasks be saved to local storage, allowing users to access their data across different sessions using JSON for saving and retrieving information. I used date-fns for handling dates throughout the application.
+
+Note: This version has been tested on desktop only, and I plan to add styling for smaller screens in the future.
